@@ -12,6 +12,15 @@ The app will serve as a public restroom locator for users, allowing them to easi
 - **Display Nearby Restrooms**: Users can view a list of restrooms near their current location or a specified area.
 - **Leave Reviews**: Users can leave written reviews and rate restrooms based on their experience.
 
+## Technical Requirements
+- Manage 4-7 database tables (entities) that are independent concepts. A simple bridge table doesn't count.
+- MySQL for data management
+- Spring Boot, MVC, JDBC, Testing, React
+- An HTML and CSS UI that's built with React
+- Sensible layering and pattern choices
+- A full test suite that covers the domain and data layers
+- Must have at least 2 roles (example User and Admin)
+
 ## Restroom Data
 
 ### Data
@@ -395,44 +404,160 @@ routine
 
 
 
-# Let's create a markdown file with the content provided.
 
 
-steps_content = """
+
+
 ## Steps
 
 
-1. **Create a Maven project**.
-2. **Add jUnit 5 (Jupiter) as a Maven dependency** and refresh Maven.
-3. **Create packages** following the structure of the application:
-   - `controllers`
-   - `data`
-   - `domain`
-   - `models`
-4. **Create the `Restroom` model** in `models`.
-5. **Create the `Amenity` model** in `models`.
-6. **Create the `RestroomAmenity` model** in `models`.
-7. **Create the data layer's custom `DataException`** in `data`.
-8. **Create the `RestroomRepository` interface** in `data`.
-9. **Create the `RestroomJdbcTemplateRepository` class** in `data`:
-   - Add the JDBC connection logic and implement methods like `findAll`, `findById`, `add`, `update`, and `deleteById`.
-   - Catch `SQLExceptions` and throw `DataException`.
-   - Implement `add`, `update`, and `deleteById` methods and test them using `RestroomJdbcTemplateRepositoryTest`.
-10. **Extract the `RestroomRepository` interface** (Refactor -> Extract Interface) from `RestroomJdbcTemplateRepository`.
-11. **Create the `RestroomService`** class in `domain`:
-   - Add a `RestroomRepository` field with a corresponding constructor.
-   - Implement methods such as `add`, `update`, `findById`, and `deleteById` and add validation.
-   - Generate tests for `RestroomService`.
-   - Create a test double (`RestroomRepositoryTestDouble`) to support service testing.
-12. **Create `RestroomController`** class in `controllers`:
-   - Add a `RestroomService` field with a corresponding constructor.
-   - Implement methods like `addRestroom`, `updateRestroom`, `deleteRestroom`, and `viewRestroom`.
-13. **Create `App` and the `main` method**:
-   - Instantiate all required objects: `RestroomRepository`, `RestroomService`, `RestroomController`, and `RestroomView`.
-   - Run the controller within `main`.
-14. **Create tests** for the application:
-   - Test the `RestroomJdbcTemplateRepository`, `RestroomService`, and `RestroomController` to ensure correct functionality.
-   - Implement tests for each method using JUnit 5 and verify data consistency and expected behavior.
+## 1. Project Setup & Initial Planning (3-4 hours)
+   - **Task:**
+     - Set up a new Spring Boot project with Maven and React project with Node.js.
+     - Define project requirements and user stories.
+     - Set up version control (Git).
+     - Plan out initial database schema and app structure.
+     - Create basic README file with project goals.
+
+   - **Estimated Time:** 3-4 hours
+
+---
+
+## 2. Database & Models Setup (3-4 hours)
+   - **Task:**
+     - Design database schema (tables: `Restrooms`, `Reviews`, `Users`, `Amenities`, etc.).
+     - Create `Restroom`, `User`, `Review`, and `Amenity` models in Java (Spring Boot).
+     - Set up JPA or JDBC repositories for basic CRUD operations.
+     - Test repository CRUD operations with sample data in the database.
+
+   - **Estimated Time:** 3-4 hours
+
+---
+
+## 3. Backend Service Layer: Create Services (3-4 hours)
+   - **Task:**
+     - Implement service classes for `RestroomService`, `UserService`, `ReviewService`, and `AmenityService`.
+     - Add business logic such as creating, updating, deleting, and validating data.
+     - Implement methods for filtering/restroom searching.
+
+   - **Estimated Time:** 3-4 hours
+
+---
+
+## 4. API Endpoints (4 hours)
+   - **Task:**
+     - Set up RESTful API controllers for `RestroomController`, `UserController`, `ReviewController`, and `AmenityController`.
+     - Implement API routes for creating, reading, updating, and deleting records.
+     - Test API endpoints using Postman or similar tools.
+
+   - **Estimated Time:** 4 hours
+
+---
+
+## 5. Frontend Setup - React App (3-4 hours)
+   - **Task:**
+     - Set up the React project with necessary dependencies (e.g., Axios for API requests).
+     - Set up folder structure for React components (e.g., `components/Restroom`, `components/Review`, etc.).
+     - Create basic static pages with minimal UI for now (e.g., Restroom list, Review form).
+
+   - **Estimated Time:** 3-4 hours
+
+---
+
+## 6. Frontend - Fetch Data & Display Restrooms (4 hours)
+   - **Task:**
+     - Create React components to display a list of restrooms.
+     - Implement a call to the backend API to fetch restrooms and display them on the frontend.
+     - Ensure data is displayed correctly in the UI.
+
+   - **Estimated Time:** 4 hours
+
+---
+
+## 7. Frontend - Review Functionality (4 hours)
+   - **Task:**
+     - Create components for submitting and displaying reviews for each restroom.
+     - Implement functionality for creating reviews using a form (with fields for rating, comment).
+     - Integrate the review submission form with the backend API.
+
+   - **Estimated Time:** 4 hours
+
+---
+
+## 8. Frontend - User Authentication (3-4 hours)
+   - **Task:**
+     - Implement user registration and login forms.
+     - Use JWT for managing user sessions.
+     - Set up protected routes to restrict access to certain parts of the app (e.g., reviews and restroom editing).
+
+   - **Estimated Time:** 3-4 hours
+
+---
+
+## 9. Backend - Authentication & Authorization (3-4 hours)
+   - **Task:**
+     - Implement user authentication backend logic (e.g., user registration, login, and JWT token generation).
+     - Protect API routes based on user roles (e.g., authenticated users can post reviews).
+     - Test endpoints with valid/invalid credentials.
+
+   - **Estimated Time:** 3-4 hours
+
+---
+
+## 10. Integrating Backend & Frontend (4 hours)
+   - **Task:**
+     - Integrate the frontend with the backend REST API.
+     - Ensure React components are correctly calling backend API endpoints and handling responses.
+     - Debug any issues related to data display or submission.
+
+   - **Estimated Time:** 4 hours
+
+---
+
+## 11. Testing API and Frontend (4 hours)
+   - **Task:**
+     - Write unit tests for backend service classes (e.g., `RestroomServiceTest`, `UserServiceTest`).
+     - Write integration tests for backend API endpoints.
+     - Write frontend tests using Jest/React Testing Library.
+     - Manually test the app for UI/UX issues.
+
+   - **Estimated Time:** 4 hours
+
+---
+
+## 12. Error Handling & Validation (3-4 hours)
+   - **Task:**
+     - Implement global exception handling for the backend.
+     - Create custom error messages and responses.
+     - Implement frontend validation for forms (e.g., required fields, correct formats for reviews, etc.).
+
+   - **Estimated Time:** 3-4 hours
+
+---
+
+## 13. Frontend - User Interaction (3-4 hours)
+   - **Task:**
+     - Implement user-friendly interactions (e.g., form submission feedback, success/failure messages).
+     - Implement loading states for data fetching.
+     - Add search and filter functionality to the frontend (e.g., filter by amenities, location).
+
+   - **Estimated Time:** 3-4 hours
+
+---
+
+## 14. Final Testing & Bug Fixing (3-4 hours)
+   - **Task:**
+     - Perform final rounds of testing on both frontend and backend.
+     - Fix any bugs found during testing.
+     - Ensure that both frontend and backend work seamlessly together.
+
+   - **Estimated Time:** 3-4 hours
+
+---
+
+## Total Estimated Time: 47-56 hours
+
+
 
 
 ## Controller Perspectives
@@ -553,3 +678,48 @@ This application will provide an easy-to-use interface where users can:
 
 
 By gathering real-time data from users and offering a user-friendly search experience, this app will bridge the gap between people in need of restrooms and the information they require, improving the overall public restroom experience.
+
+# User Stories
+
+
+## 1. User Registration and Login
+- As a user, I want to register for an account so that I can log in and access personalized features like submitting reviews and adding restroom data.
+- As a user, I want to log in to my account so that I can post reviews and add restrooms.
+- As a user, I want to log out from my account so that my personal data is protected when I am done using the app.
+
+## 2. View Restroom Listings
+- As a user, I want to view a list of nearby public restrooms based on my location so that I can easily find one when I need it.
+- As a user, I want to see basic details about each restroom, such as its address and available amenities, so that I can determine if it meets my needs.
+
+## 3. Search and Filter Restrooms
+- As a user, I want to filter the restroom listings by specific amenities (e.g., wheelchair access, baby changing table) so that I can find the most suitable restroom for my needs.
+- As a user, I want to search for restrooms by location (city, area, or near me) so that I can find the nearest restroom quickly.
+
+## 4. View Restroom Details
+- As a user, I want to view detailed information about a specific restroom, including directions, amenities, and cleanliness so that I can assess whether it’s a good option for me.
+- As a user, I want to see user reviews and ratings for each restroom to help me decide whether it’s worth visiting.
+
+## 5. Add a Restroom
+- As a user, I want to add a new restroom to the app so that others can find and use it.
+- As a user, I want to add details about the restroom, including its location, amenities, and directions.
+- As a user, I want to be able to edit the restroom data I’ve added, such as updating its address or amenities.
+- As an admin, I want to be able to edit or delete any restroom data, including restrooms added by other users, to ensure the accuracy and completeness of the information.
+
+## 6. Leave a Review
+- As a user, I want to leave a review for a restroom I have visited, including a rating and comment, so that I can share my experience with others.
+- As a user, I want to submit a review based on cleanliness, availability, and overall experience so that other users can benefit from my feedback.
+- As a user, I want to update or delete my review in case my opinion changes or I made a mistake.
+- As an admin, I want to be able to edit or delete any user reviews to ensure they meet content guidelines.
+
+## 7. Rate Restroom Cleanliness
+- As a user, I want to rate the cleanliness of the restroom so that others can assess its hygiene.
+- As a user, I want to see cleanliness ratings and reviews from others before deciding to visit a restroom.
+
+## 8. Manage My Account
+- As a user, I want to view and edit my account details (e.g., profile picture, email, password) so that I can keep my information up-to-date.
+- As a user, I want to view my past reviews and the restrooms I’ve rated so that I can track my contributions.
+
+## 9. Administrator Management
+- As an admin, I want to be able to view all user reviews, including ratings and comments, so that I can ensure that the content is appropriate.
+- As an admin, I want to manage restroom listings, including adding new restrooms, updating details, and deleting incorrect entries, to ensure users have access to the most accurate information.
+- As an admin, I want to edit or delete any restroom data or review data submitted by users to maintain accurate and appropriate content on the platform.
