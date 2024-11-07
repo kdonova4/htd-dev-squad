@@ -66,7 +66,7 @@ To maintain data integrity and ensure usability, the following validation rules 
 - **Custom Exceptions**: Repositories should throw a custom exception for data access issues rather than generic database exceptions.
 - **Testing**: Repository and service classes should be fully tested with positive and negative test cases. Test data should be isolated from production data.
 - **Enums**: Define enums in Java for fields like **Review Rating**.
-
+```
 src
 ├───main
 │   └───java
@@ -133,7 +133,7 @@ src
 │               │       UserJdbcTemplateRepositoryTest.java  
 │               │       AmenityJdbcTemplateRepository.java
 │               │       RestroomAmenityJdbcTemplateRepository.java 
-
+```
 
 
 
