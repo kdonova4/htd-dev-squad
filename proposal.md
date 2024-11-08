@@ -221,6 +221,7 @@ Custom Data Exception
 - `private final JdbcTemplate jdbcTemplate`
 - `public List<Restroom> findAll()` - finds all restrooms
 - `public Restroom findById()` - finds a restroom by id
+- `public Restroom findByName()` - finds a restroom by id
 - `public Restroom add(Restroom)` - adds a restroom
 - `public boolean update(Restroom)` - updates a restroom
 - `public boolean deleteById(int)` - deletes a restroom by its id
