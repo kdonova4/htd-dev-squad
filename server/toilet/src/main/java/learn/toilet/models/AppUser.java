@@ -15,19 +15,13 @@ public class AppUser extends User {
     private static final String AUTHORITY_PREFIX = "ROLE_";
 
     private int appUserId;
-    private String firstName;
-    private String lastName;
-    private String email;
 
-    public AppUser(int appUserId, String username,  String firstName, String lastName, String email, String password,
+    public AppUser(int appUserId, String username, String password,
                    boolean disabled, List<String> roles) {
         super(username, password, !disabled,
                 true, true, true,
                 convertRolesToAuthorities(roles));
         this.appUserId = appUserId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
     }
 
     public static List<GrantedAuthority> convertRolesToAuthorities(List<String> roles) {
