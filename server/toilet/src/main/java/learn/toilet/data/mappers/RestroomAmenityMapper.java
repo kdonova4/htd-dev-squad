@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class RestroomAmenityMapper implements RowMapper<RestroomAmenity> {
-
     @Override
     public RestroomAmenity mapRow(ResultSet resultSet, int i) throws SQLException {
 

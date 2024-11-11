@@ -1,7 +1,6 @@
 package learn.toilet.models;
 
 public class RestroomAmenity {
-
     private int restroomId;
     private Amenity amenity;
 
@@ -20,5 +19,4 @@ public class RestroomAmenity {
     public void setAmenity(Amenity amenity) {
         this.amenity = amenity;
     }
-
 }
