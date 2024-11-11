@@ -73,7 +73,8 @@ public class AmenityJdbcTemplateRepository implements AmenityRepository {
     @Override
     public boolean update(Amenity amenity) {
         final String sql = "update amenity set "
-                + "amenity_name = ?;";
+                + "amenity_name = ? "
+                + "where amenity_id = ?;";
 
         return jdbcTemplate.update(sql,
                 amenity.getAmenityName(),
@@ -83,6 +84,7 @@ public class AmenityJdbcTemplateRepository implements AmenityRepository {
 
     @Override
     public boolean deleteById(int amenityId) {
+        jdbcTemplate.update("delete from restroom_amenity where amenity_id = ?;", amenityId);
         return jdbcTemplate.update(
                 "delete from amenity where amenity_id = ?", amenityId) > 0;
     }
