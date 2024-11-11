@@ -7,9 +7,11 @@ import java.util.List;
 
 public interface AmenityRepository {
 
-    List<Amenity> amenities();
+    List<Amenity> findAll();
 
     Amenity findById(int amenityId);
+
+    Amenity findByName(String name);
 
     Amenity add(Amenity amenity);
 
