@@ -14,7 +14,7 @@ public class Review {
     private int restroomId;
 
     public Review() {
-        
+
     }
 
     public Review(int reviewId, int rating, String reviewText, LocalDateTime timeStamp, LocalDate used, int restroomId, int userId) {
