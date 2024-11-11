@@ -1,0 +1,100 @@
+drop database if exists toilet_tracker;
+create database toilet_tracker;
+use toilet_tracker;
+
+-- creating tables
+
+create table amenity (
+    amenity_id int primary key auto_increment,
+    `name` varchar(50) not null
+);
+
+create table app_user (
+    app_user_id int primary key auto_increment,
+    username varchar(50) not null unique,
+    password_hash varchar(2048) not null,
+    disabled boolean not null default(0)
+);
+
+create table app_role (
+    app_role_id int primary key auto_increment,
+    `name` varchar(50) not null unique
+);
+
+create table app_user_role (
+    app_user_id int not null,
+    app_role_id int not null,
+    constraint pk_app_user_role
+        primary key (app_user_id, app_role_id),
+    constraint fk_app_user_role_user_id
+        foreign key (app_user_id)
+        references app_user(app_user_id),
+    constraint fk_app_user_role_role_id
+        foreign key (app_role_id)
+        references app_role(app_role_id)
+);
+
+create table restroom(
+
+    restroom_id int primary key,
+    `name` varchar(100) not null,
+    latitude decimal(9,6) not null,
+    longitude decimal(9,6) not null,
+    `address` varchar(100) not null,
+    directions varchar(100) not null,
+    description varchar(150) not null,
+    app_user_id int not null,
+    constraint fk_restroom_app_user_id
+        foreign key (app_user_id)
+        references app_user(app_user_id)
+);
+
+
+create table restroom_amenity (
+    restroom_id int not null,
+    amenity_id int not null,
+    constraint pk_restroom_amenity
+        primary key(restroom_id, amenity_id),
+    constraint fk_restroom_amenity_restroom_id
+        foreign key (restroom_id)
+        references restroom(restroom_id),
+    constraint fk_restroom_amenity_amenity_id
+        foreign key (amenity_id)
+        references amenity(amenity_id)
+);
+
+
+
+create table review (
+    review_id int primary key auto_increment,
+    rating int not null,
+    review_text varchar(2500) not null,
+    `timestamp` timestamp not null,
+    restroom_id int not null,
+    constraint fk_review_restroom_id
+        foreign key (restroom_id)
+        references restroom(restroom_id)
+);
+
+
+insert into amenity (amenity_id, `name`) values
+(1, 'soap'),
+(2, 'handicap stall'),
+(3, 'water');
+
+insert into app_user (app_user_id, username, password_hash) values
+(1, '1234', '$2a$10$QO8UzE8TDb1N6BQDwMTPGeV6HMYhgeffflkj4vwZ0jxDrhplKP8Yq'),
+(2, '00000', '$2a$10$zTPuWbBfsqQ0unGV6fhf4uS7WGcC8X3FpoUVoQGSxakfydZzS5OJe');
+
+insert into restroom (restroom_id, `name`, latitude, longitude, directions, `description`, app_user_id) values
+(1, "bathroom", 40.748817, -73.985428, "down the hall", "disgusting", 1);
+
+insert into restroom_amenity (amenity_id, restroom_id) values
+(1, 1),
+(2, 1);
+
+insert into review (review_id, rating, review_text, `timestamp`, restroom_id) values
+(1, 4, 'This is a review', '2024-11-11 15:30:00', 1);
+
+
+
