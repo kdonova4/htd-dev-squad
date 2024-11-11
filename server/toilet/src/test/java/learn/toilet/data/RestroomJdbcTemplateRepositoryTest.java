@@ -46,6 +46,7 @@ class RestroomJdbcTemplateRepositoryTest {
         restroom.setLatitude(48.1234);
         restroom.setDirections("Located near the main entrance of the downtown park.");
         restroom.setDescription("A clean public restroom with wheelchair access and baby changing stations.");
+        restroom.setUserId(1);
         Restroom actual = repository.add(restroom);
         assertNotNull(actual);
         assertEquals(4, actual.getRestroomId());

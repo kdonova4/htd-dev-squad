@@ -1,5 +1,10 @@
 package learn.toilet.data;
 
+
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class AmenityJdbcTemplateRepository {
 import learn.toilet.data.mappers.AmenityMapper;
 import learn.toilet.models.Amenity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -80,4 +85,5 @@ public class AmenityJdbcTemplateRepository implements AmenityRepository {
         return jdbcTemplate.update(
                 "delete from amenity where amenity_id = ?", amenityId) > 0;
     }
+
 }

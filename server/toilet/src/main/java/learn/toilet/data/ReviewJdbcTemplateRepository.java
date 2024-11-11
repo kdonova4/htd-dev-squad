@@ -5,11 +5,13 @@ import learn.toilet.models.Review;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.util.List;
 
+@Repository
 public class ReviewJdbcTemplateRepository implements ReviewRepository{
 
     private final JdbcTemplate jdbcTemplate;
@@ -22,9 +24,9 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository{
     @Override
     public List<Review> findByUserId(int userId)
     {
-        final String sql = "select review_id, rating, review_text, timestamp, date_used, restroom_id, user_id "
+        final String sql = "select review_id, rating, review_text, timestamp, date_used, restroom_id, app_user_id "
                 + "from review"
-                + "where user_id = ?;";
+                + "where app_user_id = ?;";
 
         return jdbcTemplate.query(sql, new ReviewMapper(), userId);
     }
@@ -32,7 +34,7 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository{
     @Override
     public List<Review> findByRestroomId(int restroomId)
     {
-        final String sql = "select review_id, rating, review_text, timestamp, date_used, restroom_id, user_id "
+        final String sql = "select review_id, rating, review_text, timestamp, date_used, restroom_id, app_user_id "
                 + "from review"
                 + "where restroom_id = ?;";
 
@@ -41,7 +43,7 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository{
 
     @Override
     public Review add(Review review) {
-        final String sql = "insert into review (rating, review_text, timestamp, date_used, restroom_id, user_id)"
+        final String sql = "insert into review (rating, review_text, timestamp, date_used, restroom_id, app_user_id)"
                 +" values (?,?,?,?,?,?);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -75,7 +77,7 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository{
                 + "timestamp = ?,"
                 + "date_used = ?,"
                 + "restroom_id = ?,"
-                + "user_id = ?,"
+                + "app_user_id = ?,"
                 + "where review_id = ?;";
 
         return jdbcTemplate.update(sql,
