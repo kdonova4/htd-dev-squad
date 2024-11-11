@@ -1,6 +1,6 @@
-drop database if exists toilet_tracker_test;
-create database toilet_tracker_test;
-use toilet_tracker_test;
+drop database if exists toilet_tracker;
+create database toilet_tracker;
+use toilet_tracker;
 
 -- creating tables
 
