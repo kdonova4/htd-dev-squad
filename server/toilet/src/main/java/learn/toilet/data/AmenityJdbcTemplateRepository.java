@@ -1,5 +1,10 @@
 package learn.toilet.data;
 
+
+import org.springframework.stereotype.Repository;
+
+
+
 import learn.toilet.data.mappers.AmenityMapper;
 import learn.toilet.models.Amenity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
 
+@Repository
 public class AmenityJdbcTemplateRepository implements AmenityRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -70,8 +76,8 @@ public class AmenityJdbcTemplateRepository implements AmenityRepository {
                 + "amenity_name = ?;";
 
         return jdbcTemplate.update(sql,
-                    amenity.getAmenityName(),
-                    amenity.getAmenityId()) > 0;
+                amenity.getAmenityName(),
+                amenity.getAmenityId()) > 0;
     }
 
 
