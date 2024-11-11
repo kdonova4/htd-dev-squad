@@ -19,8 +19,8 @@ public class AppUser extends User {
     private String lastName;
     private String email;
 
-    public AppUser(int appUserId, String username, String password,
-                   boolean disabled, List<String> roles, String firstName, String lastName, String email) {
+    public AppUser(int appUserId, String username,  String firstName, String lastName, String email, String password,
+                   boolean disabled, List<String> roles) {
         super(username, password, !disabled,
                 true, true, true,
                 convertRolesToAuthorities(roles));
