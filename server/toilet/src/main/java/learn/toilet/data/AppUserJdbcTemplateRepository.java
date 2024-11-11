@@ -31,7 +31,7 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository {
 
         return jdbcTemplate.query(sql, new AppUserMapper(roles), username)
                 .stream()
-                .findFirst().orElse(null));
+                .findFirst().orElse(null);
     }
 
     @Override

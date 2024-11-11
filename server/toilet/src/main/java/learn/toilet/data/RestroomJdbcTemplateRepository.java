@@ -113,7 +113,7 @@ public class RestroomJdbcTemplateRepository implements RestroomRepository {
     private void addAmenities(Restroom restroom) {
 
         final String sql = "select ra.restroom_id, ra.amenity_id, "
-                + "a.`name` "
+                + "a.amenity_name "
                 + "from restroom_amenity ra "
                 + "inner join amenity a on ra.amenity_id = a.amenity_id "
                 + "where ra.restroom_id = ?";

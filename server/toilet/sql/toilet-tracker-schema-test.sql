@@ -6,7 +6,7 @@ use toilet_tracker_test;
 
 create table amenity (
     amenity_id int primary key auto_increment,
-    `name` varchar(50) not null
+    amenity_name varchar(50) not null
 );
 
 create table app_user (
@@ -107,7 +107,7 @@ delete from amenity;
 alter table amenity auto_increment = 1;
 
 
-insert into amenity (amenity_id, `name`) values
+insert into amenity (amenity_id, amenity_name) values
 (1, 'soap'),
 (2, 'handicap stall'),
 (3, 'water');
