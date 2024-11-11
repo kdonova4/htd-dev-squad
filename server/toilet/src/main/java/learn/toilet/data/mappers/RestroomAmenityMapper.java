@@ -15,5 +15,7 @@ public class RestroomAmenityMapper implements RowMapper<RestroomAmenity> {
 
         AmenityMapper amenityMapper = new AmenityMapper();
         restroomAmenity.setAmenity(amenityMapper.mapRow(resultSet, i));
+
+        return restroomAmenity;
     }
 }
