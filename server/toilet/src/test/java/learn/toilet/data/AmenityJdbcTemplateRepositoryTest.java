@@ -29,13 +29,14 @@ class AmenityJdbcTemplateRepositoryTest {
         Amenity actual = repository.findById(1);
         assertNotNull(actual);
         assertEquals(1, actual.getAmenityId());
+        assertEquals("soap", actual.getAmenityName());
     }
 
     @Test
     void shouldFindByName() {
-        Amenity actual = repository.findByName("");
+        Amenity actual = repository.findByName("handicap stall");
         assertNotNull(actual);
-        assertEquals(1, actual.getAmenityId());
+        assertEquals(2, actual.getAmenityId());
     }
 
     @Test
