@@ -5,7 +5,5 @@ import learn.toilet.models.RestroomAmenity;
 public interface RestroomAmenityRepository {
     boolean add(RestroomAmenity restroomAmenity);
 
-    boolean update(RestroomAmenity restroomAmenity);
-
     boolean deleteByKey(int restroomId, int amenityId);
 }

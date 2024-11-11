@@ -6,7 +6,6 @@ public class Amenity {
     private String amenityName;
 
     public Amenity() {
-
     }
 
     public Amenity(int amenityId, String amenityName) {

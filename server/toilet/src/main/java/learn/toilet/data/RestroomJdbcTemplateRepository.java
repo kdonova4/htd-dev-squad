@@ -1,5 +1,123 @@
 package learn.toilet.data;
 
-public class RestroomJdbcTemplateRepository {
+import learn.toilet.data.mappers.RestroomAmenityMapper;
+import learn.toilet.data.mappers.RestroomMapper;
+import learn.toilet.data.mappers.ReviewMapper;
+import learn.toilet.models.Restroom;
+import learn.toilet.data.RestroomRepository;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.util.List;
+
+@Repository
+public class RestroomJdbcTemplateRepository implements RestroomRepository {
+
+    private final JdbcTemplate jdbcTemplate;
+
+    public RestroomJdbcTemplateRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @Override
+    public List<Restroom> findAll() {
+        // limit until we develop a paging solution
+        final String sql = "select restroom_id, name, address, latitude, longitude, directions, description from restroom limit 1000;";
+        return jdbcTemplate.query(sql, new RestroomMapper());
+    }
+
+    @Override
+    @Transactional
+    public Restroom findById(int restroomId) {
+
+        final String sql = "select restroom_id, name, address, latitude, longitude, directions, description "
+                + "from restroom "
+                + "where restroom_id = ?;";
+
+        Restroom result = jdbcTemplate.query(sql, new RestroomMapper(), restroomId).stream()
+                .findAny().orElse(null);
+
+        if (result != null) {
+            addReviews(result);
+            addAmenities(result);
+        }
+
+        return result;
+    }
+
+    @Override
+    public Restroom add(Restroom restroom) {
+
+        final String sql = "insert into restroom (name, address, latitude, longitude, directions, description) values (?,?,?,?,?,?);";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int rowsAffected = jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, restroom.getName());
+            ps.setString(2, restroom.getAddress());
+            ps.setDouble(3, restroom.getLatitude());
+            ps.setDouble(4, restroom.getLongitude());
+            ps.setString(5, restroom.getDirections());
+            ps.setString(6, restroom.getDescription());
+            return ps;
+        }, keyHolder);
+
+        if (rowsAffected <= 0) {
+            return null;
+        }
+
+        restroom.setRestroomId(keyHolder.getKey().intValue());
+        return restroom;
+    }
+
+    @Override
+    public boolean update(Restroom restroom) {
+
+        final String sql = "update restroom set "
+                + "name = ?, "
+                + "address = ? "
+                + "latitude = ? "
+                + "longitude = ? "
+                + "directions = ? "
+                + "description = ? "
+                + "where restroom_id = ?";
+
+        return jdbcTemplate.update(sql, restroom.getName(), restroom.getAddress(), restroom.getLatitude(), restroom.getLongitude(), restroom.getDirections(), restroom.getDescription(), restroom.getRestroomId()) > 0;
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteById(int restroomId) {
+        jdbcTemplate.update("delete from review where restroom_id = ?", restroomId);
+        jdbcTemplate.update("delete from restroom_amenity where restroom_id = ?", restroomId);
+        return jdbcTemplate.update("delete from restroom where restroom_id = ?", restroomId) > 0;
+    }
+
+    private void addReviews(Restroom restroom) {
+
+        final String sql = "select review_id, rating, review_text, timestamp, date_used, restroom_id, user_id "
+                + "from review"
+                + "where restroom_id = ?";
+
+        var reviews = jdbcTemplate.query(sql, new ReviewMapper(), restroom.getRestroomId());
+        restroom.setReviews(reviews);
+    }
+
+    private void addAmenities(Restroom restroom) {
+
+        final String sql = "select ra.restroom_id, ra.amenity_id "
+                + "a.name "
+                + "from restroom_amenity ra "
+                + "inner join amenity a on ra.amenity_id = a.amenity_id "
+                + "where ra.restroom_id = ?";
+
+        var restroomAmenities = jdbcTemplate.query(sql, new RestroomAmenityMapper(), restroom.getRestroomId());
+        restroom.setAmenities(restroomAmenities);
+    }
 
 }
