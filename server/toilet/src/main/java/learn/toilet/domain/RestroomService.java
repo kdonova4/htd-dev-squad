@@ -7,6 +7,7 @@ import learn.toilet.models.RestroomAmenity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RestroomService {
@@ -21,6 +22,30 @@ public class RestroomService {
 
     public List<Restroom> findAll() {
         return restroomRepository.findAll();
+    }
+
+    public List<Restroom> findByLocation(double latitude, double longitude) {
+        double radiusInMiles = 5.0;
+
+        return restroomRepository.findAll().stream()
+                .filter(restroom -> calculateDistance(latitude, longitude, restroom.getLatitude(), restroom.getLongitude()) <= radiusInMiles)
+                .collect(Collectors.toList());
+    }
+
+    // Haversine formula to calculate the distance in miles between two lat/long points
+    private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        final int EARTH_RADIUS_MILES = 3959;
+
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return EARTH_RADIUS_MILES * c;
     }
 
     public Restroom findById(int restroomId) {
@@ -73,14 +98,14 @@ public class RestroomService {
         }
 
         if (!restroomAmenityRepository.add(restroomAmenity)) {
-            result.addMessage("agent not added", ResultType.INVALID);
+            result.addMessage("amenity not added", ResultType.INVALID);
         }
 
         return result;
     }
 
-    public boolean deleteAmenityByKey(int restroomId, int agentId) {
-        return restroomAmenityRepository.deleteByKey(restroomId, agentId);
+    public boolean deleteAmenityByKey(int restroomId, int amenityId) {
+        return restroomAmenityRepository.deleteByKey(restroomId, amenityId);
     }
 
     private Result<Restroom> validate(Restroom restroom) {
@@ -90,12 +115,20 @@ public class RestroomService {
             return result;
         }
 
-        if (Validations.isNullOrBlank(restroom.getShortName())) {
-            result.addMessage("shortName is required", ResultType.INVALID);
+        if (Validations.isNullOrBlank(restroom.getName())) {
+            result.addMessage("name is required", ResultType.INVALID);
         }
 
-        if (Validations.isNullOrBlank(restroom.getLongName())) {
-            result.addMessage("longName is required", ResultType.INVALID);
+        if (Validations.isNullOrBlank(restroom.getAddress())) {
+            result.addMessage("address is required", ResultType.INVALID);
+        }
+
+        if (Validations.isNullOrBlank(restroom.getDescription())) {
+            result.addMessage("description is required", ResultType.INVALID);
+        }
+
+        if (Validations.isNullOrBlank(restroom.getDirections())) {
+            result.addMessage("directions are required", ResultType.INVALID);
         }
 
         return result;
@@ -109,19 +142,7 @@ public class RestroomService {
         }
 
         if (restroomAmenity.getAmenity() == null) {
-            result.addMessage("agent cannot be null", ResultType.INVALID);
-        }
-
-        if (restroomAmenity.getSecurityClearance() == null) {
-            result.addMessage("securityClearance cannot be null", ResultType.INVALID);
-        }
-
-        if (Validations.isNullOrBlank(restroomAmenity.getIdentifier())) {
-            result.addMessage("identifier is required", ResultType.INVALID);
-        }
-
-        if (restroomAmenity.getActivationDate() == null) {
-            result.addMessage("activationDate is required", ResultType.INVALID);
+            result.addMessage("amenity cannot be null", ResultType.INVALID);
         }
 
         return result;
