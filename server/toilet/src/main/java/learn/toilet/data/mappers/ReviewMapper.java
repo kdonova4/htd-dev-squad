@@ -1,3 +1,4 @@
+
 package learn.toilet.data.mappers;
 
 import learn.toilet.models.Review;
@@ -15,10 +16,11 @@ public class ReviewMapper implements RowMapper<Review> {
         review.setReviewId(resultSet.getInt("review_id"));
         review.setReviewText(resultSet.getString("review_text"));
         review.setTimeStamp(resultSet.getTimestamp("timestamp").toLocalDateTime());
-        review.setUsed(resultSet.getDate("date_used"));
+        review.setUsed(resultSet.getDate("date_used").toLocalDate());
         review.setRestroomId(resultSet.getInt("restroom_id"));
         review.setUserId(resultSet.getInt("user_id"));
         return review;
 
     }
 }
+
