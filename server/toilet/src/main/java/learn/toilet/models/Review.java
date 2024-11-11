@@ -13,6 +13,20 @@ public class Review {
     private LocalDate used;
     private int restroomId;
 
+    public Review() {
+        
+    }
+
+    public Review(int reviewId, int rating, String reviewText, LocalDateTime timeStamp, LocalDate used, int restroomId, int userId) {
+        this.reviewId = reviewId;
+        this.rating = rating;
+        this.reviewText = reviewText;
+        this.timeStamp = timeStamp;
+        this.used = used;
+        this.restroomId = restroomId;
+        this.userId = userId;
+    }
+
     public int getUserId() {
         return userId;
     }
