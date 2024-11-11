@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.Timestamp;
 import java.util.List;
 
-public class ReviewJdbcTemplateRepository {
+public class ReviewJdbcTemplateRepository implements ReviewRepository{
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -19,7 +19,7 @@ public class ReviewJdbcTemplateRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-
+    @Override
     public List<Review> findByUserId(int userId)
     {
         final String sql = "select review_id, rating, review_text, timestamp, date_used, restroom_id, user_id "
@@ -29,6 +29,7 @@ public class ReviewJdbcTemplateRepository {
         return jdbcTemplate.query(sql, new ReviewMapper(), userId);
     }
 
+    @Override
     public List<Review> findByRestroomId(int restroomId)
     {
         final String sql = "select review_id, rating, review_text, timestamp, date_used, restroom_id, user_id "
@@ -38,7 +39,7 @@ public class ReviewJdbcTemplateRepository {
         return jdbcTemplate.query(sql, new ReviewMapper(), restroomId);
     }
 
-
+    @Override
     public Review add(Review review) {
         final String sql = "insert into review (rating, review_text, timestamp, date_used, restroom_id, user_id)"
                 +" values (?,?,?,?,?,?);";
@@ -65,6 +66,7 @@ public class ReviewJdbcTemplateRepository {
 
     }
 
+    @Override
     public boolean update(Review review) {
 
         final String sql = "update review set "
@@ -86,9 +88,12 @@ public class ReviewJdbcTemplateRepository {
                 review.getReviewId()) > 0;
     }
 
+    @Override
     public boolean deleteById(int reviewId) {
 
-        return false;
+        final String sql = "delete from review where review_id = ?;";
+
+        return jdbcTemplate.update(sql, reviewId) > 0;
     }
 
 
