@@ -16,6 +16,14 @@ public class AppUser extends User {
 
     private int appUserId;
 
+    public int getAppUserId() {
+        return appUserId;
+    }
+
+    public void setAppUserId(int appUserId) {
+        this.appUserId = appUserId;
+    }
+
     public AppUser(int appUserId, String username, String password,
                    boolean disabled, List<String> roles) {
         super(username, password, !disabled,
