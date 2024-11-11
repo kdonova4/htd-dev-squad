@@ -5,6 +5,9 @@ public class Amenity {
     private int amenityId;
     private String amenityName;
 
+    public Amenity(){
+    }
+
     public Amenity(String amenityName, int amenityId) {
         this.amenityName = amenityName;
         this.amenityId = amenityId;

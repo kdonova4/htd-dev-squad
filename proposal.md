@@ -275,7 +275,6 @@ Contract for UserJdbcTemplateRepository
 Contract for RestroomAmenityJdbcTemplateRepository
 
 - `public Amenity add(RestroomAmenity)`
-- `public boolean update(RestroomAmenity)`
 - `public boolean deleteById(int)`
 
 ### domain.Result
@@ -335,7 +334,6 @@ Contract for RestroomAmenityJdbcTemplateRepository
 - `private RestroomService service` -- required service dependency
 - `public RestroomAmmenityController(RestroomService)` -- constructor with dependencies
 - `public ResponseEntity<Object> add(RestroomAmmenity restroomAmmenity)` -- handles the addition of a new amenity
-- `public ResponseEntity<Object> update(RestroomAmmenity restroomAmmenity)` -- handles updating an amenity
 - `public ResponseEntity<Void> deleteByKey(int restroomId, int amenity)` -- handles the deletion of an amenity by key
 
 ### controllers.RestroomController
