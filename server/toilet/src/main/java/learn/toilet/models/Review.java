@@ -1,5 +1,6 @@
 package learn.toilet.models;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -9,8 +10,22 @@ public class Review {
     private int rating;
     private String reviewText;
     private LocalDateTime timeStamp;
-    private Date used;
+    private LocalDate used;
     private int restroomId;
+
+    public Review() {
+
+    }
+
+    public Review(int reviewId, int rating, String reviewText, LocalDateTime timeStamp, LocalDate used, int restroomId, int userId) {
+        this.reviewId = reviewId;
+        this.rating = rating;
+        this.reviewText = reviewText;
+        this.timeStamp = timeStamp;
+        this.used = used;
+        this.restroomId = restroomId;
+        this.userId = userId;
+    }
 
     public int getUserId() {
         return userId;
@@ -62,11 +77,11 @@ public class Review {
         this.rating = rating;
     }
 
-    public Date getUsed() {
+    public LocalDate getUsed() {
         return used;
     }
 
-    public void setUsed(Date used) {
+    public void setUsed(LocalDate used) {
         this.used = used;
     }
 
