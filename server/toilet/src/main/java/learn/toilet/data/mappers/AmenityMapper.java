@@ -11,7 +11,7 @@ public class AmenityMapper implements RowMapper<Amenity> {
     public Amenity mapRow(ResultSet resultSet, int i) throws SQLException {
         Amenity amenity = new Amenity();
         amenity.setAmenityId(resultSet.getInt("amenity_id"));
-        amenity.setAmenityName(resultSet.getString("amenity_name"));
+        amenity.setAmenityName(resultSet.getString("name"));
 
         return amenity;
     }

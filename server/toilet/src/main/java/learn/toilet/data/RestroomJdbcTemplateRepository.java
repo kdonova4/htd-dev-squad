@@ -35,7 +35,7 @@ public class RestroomJdbcTemplateRepository implements RestroomRepository {
     @Transactional
     public Restroom findById(int restroomId) {
 
-        final String sql = "select restroom_id, name, address, latitude, longitude, directions, description "
+        final String sql = "select restroom_id, `name`, address, latitude, longitude, directions, `description` "
                 + "from restroom "
                 + "where restroom_id = ?;";
 
@@ -53,7 +53,7 @@ public class RestroomJdbcTemplateRepository implements RestroomRepository {
     @Override
     public Restroom add(Restroom restroom) {
 
-        final String sql = "insert into restroom (name, address, latitude, longitude, directions, description) values (?,?,?,?,?,?);";
+        final String sql = "insert into restroom (name, address, latitude, longitude, directions, description, app_user_id) values (?,?,?,?,?,?,?);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int rowsAffected = jdbcTemplate.update(connection -> {
@@ -64,6 +64,7 @@ public class RestroomJdbcTemplateRepository implements RestroomRepository {
             ps.setDouble(4, restroom.getLongitude());
             ps.setString(5, restroom.getDirections());
             ps.setString(6, restroom.getDescription());
+            ps.setInt(7, restroom.getUserId());
             return ps;
         }, keyHolder);
 
@@ -80,14 +81,15 @@ public class RestroomJdbcTemplateRepository implements RestroomRepository {
 
         final String sql = "update restroom set "
                 + "name = ?, "
-                + "address = ? "
-                + "latitude = ? "
-                + "longitude = ? "
-                + "directions = ? "
-                + "description = ? "
-                + "where restroom_id = ?";
+                + "address = ?, "
+                + "latitude = ?, "
+                + "longitude = ?, "
+                + "directions = ?, "
+                + "description = ?, "
+                + "app_user_id = ? "
+                + "where restroom_id = ?;";
 
-        return jdbcTemplate.update(sql, restroom.getName(), restroom.getAddress(), restroom.getLatitude(), restroom.getLongitude(), restroom.getDirections(), restroom.getDescription(), restroom.getRestroomId()) > 0;
+        return jdbcTemplate.update(sql, restroom.getName(), restroom.getAddress(), restroom.getLatitude(), restroom.getLongitude(), restroom.getDirections(), restroom.getDescription(), restroom.getUserId(), restroom.getRestroomId()) > 0;
     }
 
     @Override
@@ -100,8 +102,8 @@ public class RestroomJdbcTemplateRepository implements RestroomRepository {
 
     private void addReviews(Restroom restroom) {
 
-        final String sql = "select review_id, rating, review_text, timestamp, date_used, restroom_id, user_id "
-                + "from review"
+        final String sql = "select review_id, rating, review_text, timestamp, date_used, restroom_id, app_user_id "
+                + "from review "
                 + "where restroom_id = ?";
 
         var reviews = jdbcTemplate.query(sql, new ReviewMapper(), restroom.getRestroomId());
@@ -110,8 +112,8 @@ public class RestroomJdbcTemplateRepository implements RestroomRepository {
 
     private void addAmenities(Restroom restroom) {
 
-        final String sql = "select ra.restroom_id, ra.amenity_id "
-                + "a.name "
+        final String sql = "select ra.restroom_id, ra.amenity_id, "
+                + "a.`name` "
                 + "from restroom_amenity ra "
                 + "inner join amenity a on ra.amenity_id = a.amenity_id "
                 + "where ra.restroom_id = ?";
