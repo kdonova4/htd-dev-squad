@@ -21,7 +21,7 @@ public class ReviewController {
         this.service = service;
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/current")
     public List<Review> findByUserId(@PathVariable int userId) {
         return service.findByUserId(userId);
     }
