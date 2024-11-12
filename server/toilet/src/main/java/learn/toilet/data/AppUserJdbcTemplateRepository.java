@@ -38,6 +38,20 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository {
 
     @Override
     @Transactional
+    public AppUser findById(int userId) {
+        List<String> roles = getRolesByUserId(userId);
+
+        final String sql = "select app_user_id, username, password_hash, disabled "
+                + "from app_user "
+                + "where app_user_id = ?;";
+
+        return jdbcTemplate.query(sql, new AppUserMapper(roles), userId)
+                .stream()
+                .findFirst().orElse(null);
+    }
+
+    @Override
+    @Transactional
     public AppUser create(AppUser user) {
 
         final String sql = "insert into app_user (username, password_hash) values (?, ?);";
@@ -100,5 +114,14 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository {
                 + "inner join app_user au on ur.app_user_id = au.app_user_id "
                 + "where au.username = ?";
         return jdbcTemplate.query(sql, (rs, rowId) -> rs.getString("name"), username);
+    }
+
+    private List<String> getRolesByUserId(int userId) {
+        final String sql = "select r.name "
+                + "from app_user_role ur "
+                + "inner join app_role r on ur.app_role_id = r.app_role_id "
+                + "inner join app_user au on ur.app_user_id = au.app_user_id "
+                + "where au.app_user_id = ?";
+        return jdbcTemplate.query(sql, (rs, rowId) -> rs.getString("name"), userId);
     }
 }
