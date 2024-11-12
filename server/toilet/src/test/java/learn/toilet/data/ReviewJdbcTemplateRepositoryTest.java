@@ -57,7 +57,7 @@ class ReviewJdbcTemplateRepositoryTest {
         review.setRating(3);
         review.setRestroomId(1);
         Timestamp t = Timestamp.valueOf(LocalDateTime.now());
-        review.setTimeStamp(t.toLocalDateTime());
+        review.setTimeStamp(t);
         review.setUsed(LocalDate.now());
         review.setUserId(1);
         Review actual = repository.add(review);
@@ -74,7 +74,7 @@ class ReviewJdbcTemplateRepositoryTest {
         review.setRating(5);
         review.setReviewText("This bathroom ROCKS!");
         Timestamp t = Timestamp.valueOf(LocalDateTime.now());
-        review.setTimeStamp(t.toLocalDateTime());
+        review.setTimeStamp(t);
         review.setUsed(LocalDate.now());
         review.setRestroomId(1);
         review.setUserId(1);

@@ -1,5 +1,8 @@
 package learn.toilet.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -9,7 +12,8 @@ public class Review {
     private int reviewId;
     private int rating;
     private String reviewText;
-    private LocalDateTime timeStamp;
+    private Timestamp timeStamp;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate used;
     private int restroomId;
 
@@ -17,7 +21,7 @@ public class Review {
 
     }
 
-    public Review(int reviewId, int rating, String reviewText, LocalDateTime timeStamp, LocalDate used, int restroomId, int userId) {
+    public Review(int reviewId, int rating, String reviewText, Timestamp timeStamp, LocalDate used, int restroomId, int userId) {
         this.reviewId = reviewId;
         this.rating = rating;
         this.reviewText = reviewText;
@@ -53,11 +57,11 @@ public class Review {
         this.reviewId = reviewId;
     }
 
-    public LocalDateTime getTimeStamp() {
+    public Timestamp getTimeStamp() {
         return timeStamp;
     }
 
-    public void setTimeStamp(LocalDateTime timeStamp) {
+    public void setTimeStamp(Timestamp timeStamp) {
         this.timeStamp = timeStamp;
     }
 
