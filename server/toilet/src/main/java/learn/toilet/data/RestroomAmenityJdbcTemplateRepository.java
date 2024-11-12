@@ -16,7 +16,7 @@ public class RestroomAmenityJdbcTemplateRepository implements RestroomAmenityRep
     @Override
     public boolean add(RestroomAmenity restroomAmenity) {
 
-        final String sql = "insert into restroom_amenity (agency_id, agent_id)"
+        final String sql = "insert into restroom_amenity (restroom_id, amenity_id)"
                 + " values "
                 + "(?,?);";
 

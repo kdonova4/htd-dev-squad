@@ -85,11 +85,10 @@ public class RestroomJdbcTemplateRepository implements RestroomRepository {
                 + "latitude = ?, "
                 + "longitude = ?, "
                 + "directions = ?, "
-                + "description = ?, "
-                + "app_user_id = ? "
+                + "description = ? "
                 + "where restroom_id = ?;";
 
-        return jdbcTemplate.update(sql, restroom.getName(), restroom.getAddress(), restroom.getLatitude(), restroom.getLongitude(), restroom.getDirections(), restroom.getDescription(), restroom.getUserId(), restroom.getRestroomId()) > 0;
+        return jdbcTemplate.update(sql, restroom.getName(), restroom.getAddress(), restroom.getLatitude(), restroom.getLongitude(), restroom.getDirections(), restroom.getDescription(), restroom.getRestroomId()) > 0;
     }
 
     @Override

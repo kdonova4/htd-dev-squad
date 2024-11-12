@@ -33,8 +33,8 @@ class RestroomJdbcTemplateRepositoryTest {
 
     @Test
     void shouldFindById() {
-        Restroom acme = repository.findById(1);
-        assertEquals("ACME", acme.getName());
+        Restroom restroom = repository.findById(1);
+        assertEquals("bathroom", restroom.getName());
     }
 
     @Test
@@ -49,14 +49,14 @@ class RestroomJdbcTemplateRepositoryTest {
         restroom.setUserId(1);
         Restroom actual = repository.add(restroom);
         assertNotNull(actual);
-        assertEquals(4, actual.getRestroomId());
+        assertEquals(2, actual.getRestroomId());
     }
 
     @Test
     void shouldUpdateRestroom() {
 
         Restroom restroom = new Restroom();
-        restroom.setRestroomId(3);
+        restroom.setRestroomId(2);
         restroom.setName("Downtown Public Restroom");
         restroom.setAddress("123 Main St, Downtown");
         restroom.setLongitude(-123.4567);
