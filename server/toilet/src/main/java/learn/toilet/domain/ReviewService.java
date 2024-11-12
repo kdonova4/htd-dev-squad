@@ -31,7 +31,7 @@ public class ReviewService {
             return result;
         }
 
-        if(review.getReviewId() <= 0){
+        if(review.getReviewId() != 0){
             result.addMessage("reviewId must be set for `add` operation", ResultType.INVALID);
             return result;
         }
