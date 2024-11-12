@@ -44,7 +44,7 @@ public class AmenityJdbcTemplateRepository implements AmenityRepository {
     public Amenity findByName(String amenityName) {
         final String sql = "select amenity_id, amenity_name "
                 + "from amenity "
-                + "where amenity_name = ?;";
+                + "where lower(amenity_name) = lower(?);";
         return jdbcTemplate.query(sql, new AmenityMapper(), amenityName).stream()
                 .findFirst()
                 .orElse(null);

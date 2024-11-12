@@ -1,13 +1,10 @@
 package learn.toilet.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import learn.toilet.data.AmenityRepository;
 import learn.toilet.data.AppUserRepository;
-import learn.toilet.data.ReviewRepository;
+import learn.toilet.models.Amenity;
 import learn.toilet.models.AppUser;
-import learn.toilet.models.Review;
 import learn.toilet.security.JwtConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,25 +15,20 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ReviewControllerTest {
+public class AmenityControllerTest {
 
     @MockBean
-    ReviewRepository repository;
+    AmenityRepository amenityRepository;
 
     @MockBean
     AppUserRepository appUserRepository;
@@ -49,28 +41,20 @@ public class ReviewControllerTest {
 
     String token;
 
-    private final ObjectMapper jsonMapper = new ObjectMapper();
-
-
     @BeforeEach
     void setup() {
-
-        AppUser appUser = new AppUser(1, "dono", "2223", false,
+        AppUser appUser = new AppUser(1, "johndoe@gmailcom", "P@sswOrd!", false,
                 List.of("ADMIN"));
 
-        when(appUserRepository.findByUsername("dono")).thenReturn(appUser);
+        when(appUserRepository.findByUsername("johndoe@gmail.com")).thenReturn(appUser);
 
         token = jwtConverter.getTokenFromUser(appUser);
-        jsonMapper.registerModule(new JavaTimeModule());
-        jsonMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
     }
-
 
     @Test
     void addShouldReturn400WhenEmpty() throws Exception {
 
-        var request = post("/api/review")
+        var request = post("/api/amenity")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token);
 
@@ -83,72 +67,72 @@ public class ReviewControllerTest {
 
         ObjectMapper jsonMapper = new ObjectMapper();
 
-        Review review = new Review();
-        String reviewJson = jsonMapper.writeValueAsString(review);
+        Amenity amenity = new Amenity();
+        String amenityJson = jsonMapper.writeValueAsString(amenity);
 
-        var request = post("/api/review")
+        var request = post("/api/amenity")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
-                .content(reviewJson);
+                .content(amenityJson);
 
         mvc.perform(request)
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    void addShouldReturn415WhenMultipart() throws Exception {
+    void appShouldReturn415WhenMultipart() throws Exception {
 
         ObjectMapper jsonMapper = new ObjectMapper();
 
-        Review review = new Review(0, 1, "TEST", null, LocalDate.now(), 1, 1);
-        String agencyJson = jsonMapper.writeValueAsString(review);
+        Amenity amenity = new Amenity(0, "New Amenity");
+        String amenityJson = jsonMapper.writeValueAsString(amenity);
 
-        var request = post("/api/review")
+        var request = post("/api/amenity")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .header("Authorization", "Bearer " + token)
-                .content(agencyJson);
+                .content(amenityJson);
 
         mvc.perform(request)
                 .andExpect(status().isUnsupportedMediaType());
     }
 
-
     @Test
     void addShouldReturn201() throws Exception {
 
-        Timestamp t = new Timestamp(System.currentTimeMillis());
-        Review review = new Review(0, 1, "TEST", t, LocalDate.now(), 1, 1);
-        Review expected = new Review(1, 1, "TEST", t, LocalDate.now(), 1, 1);
+        Amenity amenity = new Amenity(0, "New Amenity");
+        Amenity expected = new Amenity(1, "New Amenity");
 
-        when(repository.add(any())).thenReturn(expected);
+        when(amenityRepository.add(any())).thenReturn(expected);
+        ObjectMapper jsonMapper = new ObjectMapper();
 
-        String reviewJson = jsonMapper.writeValueAsString(review);
+        String amenityJson = jsonMapper.writeValueAsString(amenity);
         String expectedJson = jsonMapper.writeValueAsString(expected);
 
-        var request = post("/api/review")
+        var request = post("/api/amenity")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
-                .content(reviewJson);
+                .content(amenityJson);
 
         mvc.perform(request)
                 .andExpect(status().isCreated())
                 .andExpect(content().json(expectedJson));
     }
 
+
     @Test
     void updateShouldReturn204NoContent() throws Exception {
-        Timestamp t = new Timestamp(System.currentTimeMillis());
-        Review review = new Review(1, 1, "UPDATED TEXT", t, LocalDate.now(), 1, 1);
+        Amenity amenity = new Amenity(1, "Updated Amenity");
 
 
-        when(repository.update(any())).thenReturn(true);
+        when(amenityRepository.update(any())).thenReturn(true);
 
-        String reviewJson = jsonMapper.writeValueAsString(review);
+        ObjectMapper jsonMapper = new ObjectMapper();
+        String amenityJson = jsonMapper.writeValueAsString(amenity);
 
-        var request = put("/api/review/1")
+        var request = put("/api/amenity/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
-                .content(reviewJson);
+                .content(amenityJson);
 
         mvc.perform(request)
                 .andExpect(status().isNoContent());
@@ -159,15 +143,13 @@ public class ReviewControllerTest {
     void deleteShouldReturn204NoContent() throws Exception {
 
 
-        when(repository.deleteById(1)).thenReturn(true);
+        when(amenityRepository.deleteById(1)).thenReturn(true);
 
 
-        var request = delete("/api/review/1")
+        var request = delete("/api/amenity/1")
                 .header("Authorization", "Bearer " + token);
 
-        // Assert: Expecting 204 No Content as response
         mvc.perform(request)
                 .andExpect(status().isNoContent());
     }
-
 }
