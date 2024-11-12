@@ -1,12 +1,12 @@
 package learn.toilet.domain;
 
+import learn.toilet.data.AppUserRepository;
 import learn.toilet.data.RestroomAmenityRepository;
 import learn.toilet.data.RestroomRepository;
 import learn.toilet.models.Restroom;
 import learn.toilet.models.RestroomAmenity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,10 +15,12 @@ public class RestroomService {
 
     private final RestroomRepository restroomRepository;
     private final RestroomAmenityRepository restroomAmenityRepository;
+    private final AppUserRepository appUserRepository;
 
-    public RestroomService(RestroomRepository restroomRepository, RestroomAmenityRepository restroomAmenityRepository) {
+    public RestroomService(RestroomRepository restroomRepository, RestroomAmenityRepository restroomAmenityRepository, AppUserRepository appUserRepository) {
         this.restroomRepository = restroomRepository;
         this.restroomAmenityRepository = restroomAmenityRepository;
+        this.appUserRepository = appUserRepository;
     }
 
     public List<Restroom> findAll() {
@@ -88,8 +90,14 @@ public class RestroomService {
         return result;
     }
 
-    public boolean deleteById(int restroomId) {
-        return restroomRepository.deleteById(restroomId);
+    public Result<Restroom> deleteById(int id) {
+        Result<Restroom> result = new Result<>();
+        if (!restroomRepository.deleteById(id)) {
+            String msg = String.format("restroomId: %s, not found", id);
+            result.addMessage(msg, ResultType.NOT_FOUND);
+        }
+
+        return result;
     }
 
     public Result<Void> addAmenity(RestroomAmenity restroomAmenity) {
@@ -140,6 +148,12 @@ public class RestroomService {
             result.addMessage("longitude must be between -90 and 90 degrees", ResultType.INVALID);
         }
 
+        // Check if userId is present and refers to an existing user
+        if (restroom.getUserId() <= 0) {
+            result.addMessage("userId is required and must be a positive number", ResultType.INVALID);
+        } else if (appUserRepository.findById(restroom.getUserId()) == null) {  // Check if user exists
+            result.addMessage("userId does not refer to a valid user", ResultType.INVALID);
+        }
 
         return result;
     }
@@ -149,6 +163,10 @@ public class RestroomService {
         if (restroomAmenity == null) {
             result.addMessage("restroomAmenity cannot be null", ResultType.INVALID);
             return result;
+        }
+
+        if (restroomAmenity.getRestroomId() <= 0) {
+            result.addMessage("restroomId must be set", ResultType.INVALID);
         }
 
         if (restroomAmenity.getAmenity() == null) {
