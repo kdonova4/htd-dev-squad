@@ -122,9 +122,6 @@ public class ReviewControllerTest {
 
         when(repository.add(any())).thenReturn(expected);
 
-
-        String jsonString = jsonMapper.writeValueAsString(t);
-
         String reviewJson = jsonMapper.writeValueAsString(review);
         String expectedJson = jsonMapper.writeValueAsString(expected);
 
