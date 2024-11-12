@@ -25,6 +25,11 @@ public class RestroomController {
         return restroomService.findAll();
     }
 
+    @GetMapping("/search")
+    public List<Restroom> findByLocation(@RequestParam double latitude, @RequestParam double longitude) {
+        return restroomService.findByLocation(latitude, longitude);
+    }
+
     @GetMapping("/{restroomId}")
     public ResponseEntity<Restroom> findById(@PathVariable int restroomId) {
         Restroom restroom = restroomService.findById(restroomId);

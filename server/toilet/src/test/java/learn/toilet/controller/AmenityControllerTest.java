@@ -1,12 +1,10 @@
 package learn.toilet.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import learn.toilet.data.AmenityRepository;
 import learn.toilet.data.AppUserRepository;
-import learn.toilet.data.RestroomRepository;
+import learn.toilet.models.Amenity;
 import learn.toilet.models.AppUser;
-import learn.toilet.models.Restroom;
 import learn.toilet.security.JwtConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,23 +15,20 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class RestroomControllerTest {
+public class AmenityControllerTest {
 
     @MockBean
-    RestroomRepository repository;
+    AmenityRepository amenityRepository;
 
     @MockBean
     AppUserRepository appUserRepository;
@@ -46,28 +41,20 @@ public class RestroomControllerTest {
 
     String token;
 
-    private final ObjectMapper jsonMapper = new ObjectMapper();
-
-
     @BeforeEach
     void setup() {
-
-        AppUser appUser = new AppUser(1, "dono", "2223", false,
+        AppUser appUser = new AppUser(1, "johndoe@gmailcom", "P@sswOrd!", false,
                 List.of("ADMIN"));
 
-        when(appUserRepository.findByUsername("dono")).thenReturn(appUser);
+        when(appUserRepository.findByUsername("johndoe@gmail.com")).thenReturn(appUser);
 
         token = jwtConverter.getTokenFromUser(appUser);
-        jsonMapper.registerModule(new JavaTimeModule());
-        jsonMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-
     }
-
 
     @Test
     void addShouldReturn400WhenEmpty() throws Exception {
 
-        var request = post("/api/restroom")
+        var request = post("/api/amenity")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token);
 
@@ -80,75 +67,72 @@ public class RestroomControllerTest {
 
         ObjectMapper jsonMapper = new ObjectMapper();
 
-        Restroom restroom = new Restroom();
-        String restroomJson = jsonMapper.writeValueAsString(restroom);
+        Amenity amenity = new Amenity();
+        String amenityJson = jsonMapper.writeValueAsString(amenity);
 
-        var request = post("/api/restroom")
+        var request = post("/api/amenity")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
-                .content(restroomJson);
+                .content(amenityJson);
 
         mvc.perform(request)
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    void addShouldReturn415WhenMultipart() throws Exception {
+    void appShouldReturn415WhenMultipart() throws Exception {
 
         ObjectMapper jsonMapper = new ObjectMapper();
 
-        Restroom restroom = new Restroom(0, "bathroom", 40.748817, -73.985428, "10 apple street", "down the hall", "disgusting", 1);
-        String agencyJson = jsonMapper.writeValueAsString(restroom);
+        Amenity amenity = new Amenity(0, "New Amenity");
+        String amenityJson = jsonMapper.writeValueAsString(amenity);
 
-        var request = post("/api/restroom")
+        var request = post("/api/amenity")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .header("Authorization", "Bearer " + token)
-                .content(agencyJson);
+                .content(amenityJson);
 
         mvc.perform(request)
                 .andExpect(status().isUnsupportedMediaType());
     }
 
-
     @Test
     void addShouldReturn201() throws Exception {
 
-        Timestamp t = new Timestamp(System.currentTimeMillis());
-        Restroom restroom = new Restroom(0, "bathroom", 40.748817, -73.985428, "10 apple street", "down the hall", "disgusting", 1);
-        Restroom expected = new Restroom(1, "bathroom", 40.748817, -73.985428, "10 apple street", "down the hall", "disgusting", 1);
-        AppUser user = new AppUser(1, "1234", "$2a$10$QO8UzE8TDb1N6BQDwMTPGeV6HMYhgeffflkj4vwZ0jxDrhplKP8Yq", true, List.of("admin"));
+        Amenity amenity = new Amenity(0, "New Amenity");
+        Amenity expected = new Amenity(1, "New Amenity");
 
-        when(repository.add(any())).thenReturn(expected);
-        when(appUserRepository.findById(1)).thenReturn(user);
+        when(amenityRepository.add(any())).thenReturn(expected);
+        ObjectMapper jsonMapper = new ObjectMapper();
 
-        String restroomJson = jsonMapper.writeValueAsString(restroom);
+        String amenityJson = jsonMapper.writeValueAsString(amenity);
         String expectedJson = jsonMapper.writeValueAsString(expected);
 
-        var request = post("/api/restroom")
+        var request = post("/api/amenity")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
-                .content(restroomJson);
+                .content(amenityJson);
 
         mvc.perform(request)
                 .andExpect(status().isCreated())
                 .andExpect(content().json(expectedJson));
     }
 
+
     @Test
     void updateShouldReturn204NoContent() throws Exception {
-        Timestamp t = new Timestamp(System.currentTimeMillis());
-        Restroom restroom = new Restroom(1, "UPDATE", 40.748817, -73.985428, "10 apple street", "down the hall", "disgusting", 1);
-        AppUser user = new AppUser(1, "1234", "$2a$10$QO8UzE8TDb1N6BQDwMTPGeV6HMYhgeffflkj4vwZ0jxDrhplKP8Yq", true, List.of("admin"));
+        Amenity amenity = new Amenity(1, "Updated Amenity");
 
-        when(repository.update(any())).thenReturn(true);
-        when(appUserRepository.findById(1)).thenReturn(user);
 
-        String restroomJson = jsonMapper.writeValueAsString(restroom);
+        when(amenityRepository.update(any())).thenReturn(true);
 
-        var request = put("/api/restroom/1")
+        ObjectMapper jsonMapper = new ObjectMapper();
+        String amenityJson = jsonMapper.writeValueAsString(amenity);
+
+        var request = put("/api/amenity/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
-                .content(restroomJson);
+                .content(amenityJson);
 
         mvc.perform(request)
                 .andExpect(status().isNoContent());
@@ -159,15 +143,13 @@ public class RestroomControllerTest {
     void deleteShouldReturn204NoContent() throws Exception {
 
 
-        when(repository.deleteById(1)).thenReturn(true);
+        when(amenityRepository.deleteById(1)).thenReturn(true);
 
 
-        var request = delete("/api/restroom/1")
+        var request = delete("/api/amenity/1")
                 .header("Authorization", "Bearer " + token);
 
-        // Assert: Expecting 204 No Content as response
         mvc.perform(request)
                 .andExpect(status().isNoContent());
     }
-
 }
