@@ -30,7 +30,7 @@ public class JwtRequestFilter extends BasicAuthenticationFilter {
         if (authorization != null && authorization.startsWith("Bearer ")) {
             User user = converter.getUserFromToken(authorization);
             if (user == null) {
-                response.setStatus(403);
+                response.setStatus(403); // Forbidden
             } else {
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                         user.getUsername(), null, user.getAuthorities());

@@ -5,6 +5,7 @@ import learn.toilet.models.AppUser;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
@@ -12,6 +13,7 @@ import java.sql.Statement;
 import java.util.Collection;
 import java.util.List;
 
+@Repository
 public class AppUserJdbcTemplateRepository implements AppUserRepository {
 
     private final JdbcTemplate jdbcTemplate;
@@ -27,7 +29,7 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository {
 
         final String sql = "select app_user_id, username, password_hash, disabled "
                 + "from app_user "
-                + "where username = ?";
+                + "where username = ?;";
 
         return jdbcTemplate.query(sql, new AppUserMapper(roles), username)
                 .stream()
@@ -35,6 +37,7 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository {
     }
 
     @Override
+    @Transactional
     public AppUser create(AppUser user) {
 
         final String sql = "insert into app_user (username, password_hash) values (?, ?);";
@@ -73,7 +76,7 @@ public class AppUserJdbcTemplateRepository implements AppUserRepository {
         updateRoles(user);
     }
 
-    public void updateRoles(AppUser user) {
+    private void updateRoles(AppUser user) {
         // delete all roles, then re-add
         jdbcTemplate.update("delete from app_user_role where app_user_id = ?;", user.getAppUserId());
 
