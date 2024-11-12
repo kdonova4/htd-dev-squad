@@ -49,7 +49,7 @@ class RestroomJdbcTemplateRepositoryTest {
         restroom.setUserId(1);
         Restroom actual = repository.add(restroom);
         assertNotNull(actual);
-        assertEquals(2, actual.getRestroomId());
+        assertEquals(3, actual.getRestroomId());
     }
 
     @Test
