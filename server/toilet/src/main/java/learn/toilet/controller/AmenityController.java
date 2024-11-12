@@ -1,4 +1,4 @@
 package learn.toilet.controller;
 
-public class AmmenityController {
+public class AmenityController {
 }
