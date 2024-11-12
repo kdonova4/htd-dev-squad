@@ -116,15 +116,17 @@ insert into app_user (app_user_id, username, password_hash) values
 (2, '00000', '$2a$10$zTPuWbBfsqQ0unGV6fhf4uS7WGcC8X3FpoUVoQGSxakfydZzS5OJe');
 
 insert into restroom (restroom_id, `name`, latitude, longitude, address, directions, `description`, app_user_id) values
-(1, "bathroom", 40.748817, -73.985428, '10 apple street', "down the hall", "disgusting", 1);
+(1, "bathroom", 40.748817, -73.985428, '10 apple street', "down the hall", "disgusting", 1),
+(2, "Central Park Restroom", 40.785091, -73.968285, '5 Central Park Ave', "near the main entrance", "clean but crowded", 2);
 
 insert into restroom_amenity (amenity_id, restroom_id) values 
 (1, 1),
 (2, 1);
 
 insert into review (review_id, rating, review_text, `timestamp`, date_used, restroom_id, app_user_id) values
-(1, 4, 'This is a review', '2024-11-11 15:30:00', '2020-11-24', 1, 2);
-
+(1, 4, 'This is a review', '2024-11-11 15:30:00', '2020-11-24', 1, 2),
+(2, 5, 'Immaculate and well-maintained.', '2024-11-10 09:15:00', '2024-10-15', 2, 1),
+(3, 2, 'Could use some cleaning.', '2024-11-09 18:20:00', '2024-09-05', 1, 2);
 
 end //
 

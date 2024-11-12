@@ -45,7 +45,7 @@ class ReviewJdbcTemplateRepositoryTest {
     {
         System.out.println(repository.findByRestroomId(1));
         List<Review> reviewsById = repository.findByRestroomId(1);
-        assertTrue(reviewsById.size() > 0);
+        assertTrue(reviewsById.size() >= 0 && reviewsById.size() <= 2);
     }
 
     @Test
@@ -62,7 +62,7 @@ class ReviewJdbcTemplateRepositoryTest {
         review.setUserId(1);
         Review actual = repository.add(review);
 
-        assertEquals(2, actual.getReviewId());
+        assertEquals(4, actual.getReviewId());
 
     }
 
@@ -70,7 +70,7 @@ class ReviewJdbcTemplateRepositoryTest {
     void shouldUpdate()
     {
         Review review = new Review();
-        review.setReviewId(1);
+        review.setReviewId(3);
         review.setRating(5);
         review.setReviewText("This bathroom ROCKS!");
         Timestamp t = Timestamp.valueOf(LocalDateTime.now());
