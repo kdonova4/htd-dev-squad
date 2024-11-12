@@ -58,7 +58,8 @@ public class RestroomController {
 
     @DeleteMapping("/{restroomId}")
     public ResponseEntity<Void> deleteById(@PathVariable int restroomId) {
-        if (restroomService.deleteById(restroomId)) {
+        Result<Restroom> result = restroomService.deleteById(restroomId);
+        if (result.isSuccess()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
