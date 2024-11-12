@@ -37,6 +37,7 @@ public class ReviewController {
         if(result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
         }
+
         return ErrorResponse.build(result);
     }
 
