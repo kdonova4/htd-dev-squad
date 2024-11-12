@@ -80,8 +80,10 @@ public class ReviewService {
             result.addMessage("Review Body Is Required", ResultType.INVALID);
         }
 
-        if(review.getUsed().isAfter(LocalDate.now())) {
+        if (review.getUsed() != null && review.getUsed().isAfter(LocalDate.now())) {
             result.addMessage("Date Used must be in the past", ResultType.INVALID);
+        } else if (review.getUsed() == null) {
+            result.addMessage("Date Used cannot be null", ResultType.INVALID);
         }
 
         return result;

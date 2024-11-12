@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest()
 public class ReviewServiceTest {
 
     @Autowired
@@ -30,8 +30,8 @@ public class ReviewServiceTest {
     void shouldAdd()
     {
         Timestamp t = Timestamp.valueOf(LocalDateTime.now());
-        Review review = new Review(0, 1, "TEST", t.toLocalDateTime(), LocalDate.now(), 1, 1);
-        Review mockOut = new Review(4, 1, "TEST", t.toLocalDateTime(), LocalDate.now(), 1, 1);
+        Review review = new Review(0, 1, "TEST", t, LocalDate.now(), 1, 1);
+        Review mockOut = new Review(4, 1, "TEST", t, LocalDate.now(), 1, 1);
 
         when(reviewRepository.add(review)).thenReturn(mockOut);
 
@@ -44,7 +44,7 @@ public class ReviewServiceTest {
     void shouldNotAddWhenInvalid()
     {
         Timestamp t = Timestamp.valueOf(LocalDateTime.now());
-        Review review = new Review(14, 1, "TEST", t.toLocalDateTime(), LocalDate.now(), 1, 1);
+        Review review = new Review(14, 1, "TEST", t, LocalDate.now(), 1, 1);
 
         //reviewId must not be set when adding
         Result<Review> actual = service.add(review);
@@ -73,7 +73,7 @@ public class ReviewServiceTest {
     void shouldUpdate()
     {
         Timestamp t = Timestamp.valueOf(LocalDateTime.now());
-        Review review = new Review(1, 1, "TEST", t.toLocalDateTime(), LocalDate.now(), 1, 1);
+        Review review = new Review(1, 1, "TEST", t, LocalDate.now(), 1, 1);
 
         when(reviewRepository.update(review)).thenReturn(true);
 
@@ -86,7 +86,7 @@ public class ReviewServiceTest {
     void shouldNotUpdateWhenMissing()
     {
         Timestamp t = Timestamp.valueOf(LocalDateTime.now());
-        Review review = new Review(100, 1, "TEST", t.toLocalDateTime(), LocalDate.now(), 1, 1);
+        Review review = new Review(100, 1, "TEST", t, LocalDate.now(), 1, 1);
 
         when(reviewRepository.update(review)).thenReturn(false);
 
@@ -99,7 +99,7 @@ public class ReviewServiceTest {
     void shouldNotUpdateWhenInvalid()
     {
         Timestamp t = Timestamp.valueOf(LocalDateTime.now());
-        Review review = new Review(1, 1, "TEST", t.toLocalDateTime(), LocalDate.now(), 1, 1);
+        Review review = new Review(1, 1, "TEST", t, LocalDate.now(), 1, 1);
 
         review.setRating(0);
         Result<Review> actual = service.update(review);

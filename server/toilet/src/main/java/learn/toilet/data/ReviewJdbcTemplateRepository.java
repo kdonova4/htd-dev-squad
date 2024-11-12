@@ -8,8 +8,11 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 @Repository
@@ -54,8 +57,8 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository{
             PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setInt(1, review.getRating());
             ps.setString(2, review.getReviewText());
-            ps.setTimestamp(3, Timestamp.valueOf(review.getTimeStamp()));
-            ps.setDate(4, java.sql.Date.valueOf(review.getUsed()));
+            ps.setTimestamp(3, review.getTimeStamp());
+            ps.setDate(4, Date.valueOf(review.getUsed()));
             ps.setInt(5, review.getRestroomId());
             ps.setInt(6, review.getUserId());
             return ps;
