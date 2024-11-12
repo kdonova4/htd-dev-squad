@@ -6,15 +6,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import javax.validation.ValidationException;
 import java.util.List;
 
+@Service
 public class AppUserService implements UserDetailsService {
     private final AppUserRepository repository;
     private final PasswordEncoder encoder;
 
-    public AppUserService(AppUserRepository repository, PasswordEncoder encoder) {
+    public AppUserService(AppUserRepository repository,
+                          PasswordEncoder encoder) {
         this.repository = repository;
         this.encoder = encoder;
     }
@@ -46,7 +49,7 @@ public class AppUserService implements UserDetailsService {
             throw new ValidationException("username is required");
         }
 
-        if(username.length() > 50) {
+        if (username.length() > 50) {
             throw new ValidationException("username must be less than 50 characters");
         }
     }
