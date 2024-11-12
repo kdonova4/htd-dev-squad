@@ -21,12 +21,12 @@ public class ReviewController {
         this.service = service;
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/current")
     public List<Review> findByUserId(@PathVariable int userId) {
         return service.findByUserId(userId);
     }
 
-    @GetMapping("/review/{restroomId}")
+    @GetMapping("/{restroomId}")
     public List<Review> findByRestroomId(@PathVariable int restroomId) {
         return service.findByRestroomId(restroomId);
     }
