@@ -41,8 +41,8 @@ class RestroomAmenityJdbcTemplateRepositoryTest {
 
     @Test
     void shouldDelete() {
-        assertTrue(repository.deleteByKey(1, 3));
-        assertFalse(repository.deleteByKey(1, 3));
+        assertTrue(repository.deleteByKey(1, 1));
+        assertFalse(repository.deleteByKey(1, 1));
     }
 
     RestroomAmenity makeRestroomAmenity() {
@@ -50,7 +50,7 @@ class RestroomAmenityJdbcTemplateRepositoryTest {
         restroomAmenity.setRestroomId(1);
 
         Amenity amenity = new Amenity();
-        amenity.setAmenityId(6);
+        amenity.setAmenityId(3);
         amenity.setAmenityName("Test");
         restroomAmenity.setAmenity(amenity);
         return restroomAmenity;
