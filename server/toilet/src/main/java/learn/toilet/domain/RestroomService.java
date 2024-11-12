@@ -6,6 +6,7 @@ import learn.toilet.models.Restroom;
 import learn.toilet.models.RestroomAmenity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -130,6 +131,15 @@ public class RestroomService {
         if (Validations.isNullOrBlank(restroom.getDirections())) {
             result.addMessage("directions are required", ResultType.INVALID);
         }
+
+        if (restroom.getLatitude() < -90 || restroom.getLatitude() > 90) {
+            result.addMessage("latitude must be between -90 and 90 degrees", ResultType.INVALID);
+        }
+
+        if (restroom.getLongitude() < -180 || restroom.getLongitude() > 180) {
+            result.addMessage("longitude must be between -90 and 90 degrees", ResultType.INVALID);
+        }
+
 
         return result;
     }
