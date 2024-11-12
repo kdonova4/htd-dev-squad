@@ -92,10 +92,8 @@ delete from review;
 alter table review auto_increment = 1;
 
 delete from restroom_amenity;
-alter table restroom_amenity auto_increment = 1;
 
 delete from app_user_role;
-alter table app_user_role auto_increment = 1;
 
 delete from restroom;
 alter table restroom auto_increment = 1;
@@ -132,4 +130,4 @@ end //
 
 delimiter ;
 
-
+select * from review;

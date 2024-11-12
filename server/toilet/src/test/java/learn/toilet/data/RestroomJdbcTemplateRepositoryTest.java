@@ -56,7 +56,7 @@ class RestroomJdbcTemplateRepositoryTest {
     void shouldUpdateRestroom() {
 
         Restroom restroom = new Restroom();
-        restroom.setRestroomId(2);
+        restroom.setRestroomId(1);
         restroom.setName("Downtown Public Restroom");
         restroom.setAddress("123 Main St, Downtown");
         restroom.setLongitude(-123.4567);
@@ -69,7 +69,7 @@ class RestroomJdbcTemplateRepositoryTest {
 
     @Test
     void shouldDeleteRestroom() {
-        assertTrue(repository.deleteById(2));
-        assertFalse(repository.deleteById(2));
+        assertTrue(repository.deleteById(1));
+        assertFalse(repository.deleteById(1));
     }
 }

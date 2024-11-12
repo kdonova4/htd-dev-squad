@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.Timestamp;
@@ -25,7 +26,7 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository{
     public List<Review> findByUserId(int userId)
     {
         final String sql = "select review_id, rating, review_text, timestamp, date_used, restroom_id, app_user_id "
-                + "from review"
+                + "from review "
                 + "where app_user_id = ?;";
 
         return jdbcTemplate.query(sql, new ReviewMapper(), userId);
@@ -35,12 +36,13 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository{
     public List<Review> findByRestroomId(int restroomId)
     {
         final String sql = "select review_id, rating, review_text, timestamp, date_used, restroom_id, app_user_id "
-                + "from review"
+                + "from review "
                 + "where restroom_id = ?;";
 
         return jdbcTemplate.query(sql, new ReviewMapper(), restroomId);
     }
 
+    @Transactional
     @Override
     public Review add(Review review) {
         final String sql = "insert into review (rating, review_text, timestamp, date_used, restroom_id, app_user_id)"
@@ -68,16 +70,17 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository{
 
     }
 
+    @Transactional
     @Override
     public boolean update(Review review) {
 
         final String sql = "update review set "
                 + "rating = ?, "
                 + "review_text = ?, "
-                + "timestamp = ?,"
-                + "date_used = ?,"
-                + "restroom_id = ?,"
-                + "app_user_id = ?,"
+                + "timestamp = ?, "
+                + "date_used = ?, "
+                + "restroom_id = ?, "
+                + "app_user_id = ? "
                 + "where review_id = ?;";
 
         return jdbcTemplate.update(sql,
@@ -90,6 +93,7 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository{
                 review.getReviewId()) > 0;
     }
 
+    @Transactional
     @Override
     public boolean deleteById(int reviewId) {
 
