@@ -69,6 +69,7 @@ public class AmenityService {
         Result<Amenity> result = new Result<>();
         if (amenity == null) {
             result.addMessage("amenity cannot be null", ResultType.INVALID);
+            return result;
         }
 
         if (Validations.isNullOrBlank(amenity.getAmenityName())) {
