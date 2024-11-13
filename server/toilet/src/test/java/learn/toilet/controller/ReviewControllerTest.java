@@ -85,6 +85,7 @@ public class ReviewControllerTest {
         ObjectMapper jsonMapper = new ObjectMapper();
 
         Review review = new Review();
+        review.setUserId(1);
         String reviewJson = jsonMapper.writeValueAsString(review);
 
         var request = post("/api/review")

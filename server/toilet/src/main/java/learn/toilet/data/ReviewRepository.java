@@ -5,6 +5,7 @@ import learn.toilet.models.Review;
 import java.util.List;
 
 public interface ReviewRepository {
+    Review findById(int reviewId);
 
     List<Review> findByUserId(int userId);
 

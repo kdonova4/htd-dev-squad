@@ -21,8 +21,12 @@ const RESTROOM_DEFAULT = {
     address: '',
     directions: '',
     description: '',
-    userId: ''
+    userId: '',
+    amenities: []
 }
+
+const amenitiesList = ['Wi-Fi', 'Handicap Accessible', 'Changing Table', 'Restroom with Showers']; // Example amenities
+
 
 const RestroomForm = () => {
     const [restroom, setRestroom] = useState(RESTROOM_DEFAULT);
@@ -129,7 +133,7 @@ const RestroomForm = () => {
         }
     };
 
-     const updateRestroom = () => {
+    const updateRestroom = () => {
         restroom.restroomId = restroomId;
         const init = {
             method: 'PUT',
@@ -163,6 +167,16 @@ const RestroomForm = () => {
             })
             .catch(console.log)
     }
+
+    const handleAmenityChange = (e) => {
+        const { value, checked } = e.target;
+        setRestroom(prev => {
+            const amenities = checked
+                ? [...prev.amenities, value]
+                : prev.amenities.filter(amenity => amenity !== value);
+            return { ...prev, amenities };
+        });
+    };
 
 
     // Custom component to update map center
@@ -213,6 +227,19 @@ const RestroomForm = () => {
                                 onChange={handleChange}
                                 rows={3}
                             />
+                        </Form.Group>
+                        <Form.Group controlId="amenities">
+                            <Form.Label>Amenities</Form.Label>
+                            {amenitiesList.map((amenity) => (
+                                <Form.Check
+                                    key={amenity}
+                                    type="checkbox"
+                                    label={amenity}
+                                    value={amenity}
+                                    checked={restroom.amenities.includes(amenity)}
+                                    onChange={handleAmenityChange}
+                                />
+                            ))}
                         </Form.Group>
                         <Form.Group controlId="submit" className="mt-3">
                             <Button variant="primary" type="submit" className="mr-2">

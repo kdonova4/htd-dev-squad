@@ -16,6 +16,7 @@ public class Review {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate used;
     private int restroomId;
+    private int userId;
 
     public Review() {
 
@@ -46,8 +47,6 @@ public class Review {
     public void setRestroomId(int restroomId) {
         this.restroomId = restroomId;
     }
-
-    private int userId;
 
     public int getReviewId() {
         return reviewId;

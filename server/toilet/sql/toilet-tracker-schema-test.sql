@@ -98,6 +98,12 @@ delete from app_user_role;
 delete from restroom;
 alter table restroom auto_increment = 1;
 
+delete from app_user_role;
+alter table app_user_role auto_increment = 1;
+
+delete from app_role;
+alter table app_role auto_increment = 1;
+
 delete from app_user;
 alter table app_user auto_increment = 1;
 
@@ -114,6 +120,15 @@ insert into amenity (amenity_id, amenity_name) values
 insert into app_user (app_user_id, username, password_hash) values
 (1, '1234', '$2a$10$QO8UzE8TDb1N6BQDwMTPGeV6HMYhgeffflkj4vwZ0jxDrhplKP8Yq'),
 (2, '00000', '$2a$10$zTPuWbBfsqQ0unGV6fhf4uS7WGcC8X3FpoUVoQGSxakfydZzS5OJe');
+
+insert into app_role (`name`) values
+    ('USER'),
+    ('ADMIN');
+
+insert into app_user_role
+    values
+    (1, 2),
+    (2, 1);
 
 insert into restroom (restroom_id, `name`, latitude, longitude, address, directions, `description`, app_user_id) values
 (1, "bathroom", 40.748817, -73.985428, '10 apple street', "down the hall", "disgusting", 1),

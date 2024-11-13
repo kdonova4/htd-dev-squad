@@ -16,6 +16,10 @@ public class ReviewService {
         this.repository = repository;
     }
 
+    public Review findById(int reviewId) {
+        return repository.findById(reviewId);
+    }
+
     public List<Review> findByUserId(int userId) {
         return repository.findByUserId(userId);
     }
