@@ -32,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/user/register").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/restroom").permitAll()  // Allow GET requests to /public/**
                 .antMatchers(HttpMethod.GET, "/api/review/{restroomId}").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/restroom/search").permitAll()
                 .antMatchers("/api/amenity/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
