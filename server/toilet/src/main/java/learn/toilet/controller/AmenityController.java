@@ -3,7 +3,6 @@ package learn.toilet.controller;
 import learn.toilet.domain.AmenityService;
 import learn.toilet.domain.Result;
 import learn.toilet.models.Amenity;
-import learn.toilet.security.AppUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ public class AmenityController {
     private final AmenityService service;
 
 
-    public AmenityController(AppUserService appUserService, AmenityService service) {
+    public AmenityController(AmenityService service) {
         this.service = service;
     }
 
