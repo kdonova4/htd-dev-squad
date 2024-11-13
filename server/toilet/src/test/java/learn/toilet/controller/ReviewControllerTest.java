@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import learn.toilet.data.AppUserRepository;
 import learn.toilet.data.ReviewRepository;
 import learn.toilet.models.AppUser;
+import learn.toilet.models.Restroom;
 import learn.toilet.models.Review;
 import learn.toilet.security.JwtConverter;
 import org.junit.jupiter.api.BeforeEach;
@@ -154,6 +155,39 @@ public class ReviewControllerTest {
                 .andExpect(status().isNoContent());
     }
 
+    @Test
+    void updateShouldReturn400WhenInvalid() throws Exception {
+        Timestamp t = new Timestamp(System.currentTimeMillis());
+        Review review = new Review(1, 1, null, t, LocalDate.now(), 1, 1);
+
+        String reviewJson = jsonMapper.writeValueAsString(review);
+
+        var request = put("/api/review/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
+                .content(reviewJson);
+
+        mvc.perform(request)
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    void updateShouldReturn409WhenIdsDoNotMatch() throws Exception {
+        Timestamp t = new Timestamp(System.currentTimeMillis());
+        Review review = new Review(1, 1, null, t, LocalDate.now(), 1, 1);
+
+        String reviewJson = jsonMapper.writeValueAsString(review);
+
+        var request = put("/api/review/9")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
+                .content(reviewJson);
+
+        mvc.perform(request)
+                .andExpect(status().isConflict());
+    }
+
 
     @Test
     void deleteShouldReturn204NoContent() throws Exception {
@@ -168,6 +202,18 @@ public class ReviewControllerTest {
         // Assert: Expecting 204 No Content as response
         mvc.perform(request)
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteShouldReturn404NotFoundWhenMissing() throws Exception {
+        when(repository.deleteById(1)).thenReturn(false);
+
+        var request = delete("/api/review/1")
+                .header("Authorization", "Bearer " + token);
+
+        // Assert: Expecting 404 Not found as response
+        mvc.perform(request)
+                .andExpect(status().isNotFound());
     }
 
 }

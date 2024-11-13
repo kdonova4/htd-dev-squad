@@ -5,6 +5,7 @@ import learn.toilet.data.AmenityRepository;
 import learn.toilet.data.AppUserRepository;
 import learn.toilet.models.Amenity;
 import learn.toilet.models.AppUser;
+import learn.toilet.models.Review;
 import learn.toilet.security.JwtConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -138,6 +141,39 @@ public class AmenityControllerTest {
                 .andExpect(status().isNoContent());
     }
 
+    @Test
+    void updateShouldReturn400WhenInvalid() throws Exception {
+        Amenity amenity = new Amenity(1, null);
+
+        ObjectMapper jsonMapper = new ObjectMapper();
+        String amenityJson = jsonMapper.writeValueAsString(amenity);
+
+        var request = put("/api/amenity/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
+                .content(amenityJson);
+
+        mvc.perform(request)
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    void updateShouldReturn409WhenIdsDoNotMatch() throws Exception {
+        Amenity amenity = new Amenity(1, "Updated Amenity");
+
+        ObjectMapper jsonMapper = new ObjectMapper();
+        String amenityJson = jsonMapper.writeValueAsString(amenity);
+
+        var request = put("/api/amenity/9")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
+                .content(amenityJson);
+
+        mvc.perform(request)
+                .andExpect(status().isConflict());
+    }
+
 
     @Test
     void deleteShouldReturn204NoContent() throws Exception {
@@ -151,5 +187,17 @@ public class AmenityControllerTest {
 
         mvc.perform(request)
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteShouldReturn404NotFoundWhenMissing() throws Exception {
+        when(amenityRepository.deleteById(1)).thenReturn(false);
+
+        var request = delete("/api/amenity/1")
+                .header("Authorization", "Bearer " + token);
+
+        // Assert: Expecting 404 Not found as response
+        mvc.perform(request)
+                .andExpect(status().isNotFound());
     }
 }
