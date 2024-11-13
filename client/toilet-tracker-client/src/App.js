@@ -4,6 +4,9 @@ import Login from "./Login";
 import Register from "./Register";
 import RestroomForm from "./RestroomForm";
 import NavBar from "./NavBar";
+
+import ReviewList from "./ReviewList";
+import ReviewForm from "./ReviewForm";
 import { Container } from "react-bootstrap";
 
 function App() {
@@ -15,6 +18,8 @@ function App() {
           <Routes>
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/" element={<ReviewList/>}/>
+            <Route path="/review/new" element={<ReviewForm/>}/>
             <Route path="/restrooms/new" element={<RestroomForm />} />
             <Route
               path="/restrooms/edit/:restroomId"
@@ -22,6 +27,7 @@ function App() {
             />
           </Routes>
         </Container>
+
       </Router>
     </>
   );
