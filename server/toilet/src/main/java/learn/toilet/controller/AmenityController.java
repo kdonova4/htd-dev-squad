@@ -3,20 +3,27 @@ package learn.toilet.controller;
 import learn.toilet.domain.AmenityService;
 import learn.toilet.domain.Result;
 import learn.toilet.models.Amenity;
+import learn.toilet.security.AppUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000"})
-@RequestMapping("/api/admin/amenity")
+@RequestMapping("/api/amenity")
 public class AmenityController {
-
     private final AmenityService service;
 
 
-    public AmenityController(AmenityService service) {
+    public AmenityController(AppUserService appUserService, AmenityService service) {
         this.service = service;
+    }
+
+    @GetMapping()
+    public List<Amenity> findAll() {
+        return service.findAll();
     }
 
     @GetMapping("/{amenityId}")
@@ -28,7 +35,7 @@ public class AmenityController {
         return ResponseEntity.ok(amenity);
     }
 
-    @PostMapping
+    @PostMapping("/admin")
     public ResponseEntity<Object> add(@RequestBody Amenity amenity) {
         Result<Amenity> result = service.add(amenity);
         if(result.isSuccess()) {
@@ -37,7 +44,7 @@ public class AmenityController {
         return ErrorResponse.build(result);
     }
 
-    @PutMapping("/{amenityId}")
+    @PutMapping("/admin/{amenityId}")
     public ResponseEntity<Object> update(@PathVariable int amenityId, @RequestBody Amenity amenity) {
         if(amenityId != amenity.getAmenityId()) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -51,7 +58,7 @@ public class AmenityController {
         return ErrorResponse.build(result);
     }
 
-    @DeleteMapping("/{amenityId}")
+    @DeleteMapping("/admin/{amenityId}")
     public ResponseEntity<Object> deleteById(@PathVariable int amenityId) {
         if(service.deleteById(amenityId)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
