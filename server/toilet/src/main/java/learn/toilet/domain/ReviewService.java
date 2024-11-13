@@ -4,7 +4,9 @@ import learn.toilet.data.ReviewRepository;
 import learn.toilet.models.Review;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -25,7 +27,7 @@ public class ReviewService {
     }
 
     public List<Review> findByRestroomId(int restroomId) {
-        return repository.findByUserId(restroomId);
+        return repository.findByRestroomId(restroomId);
     }
 
     public Result<Review> add(Review review) {
@@ -38,6 +40,11 @@ public class ReviewService {
         if(review.getReviewId() != 0){
             result.addMessage("reviewId must be set for `add` operation", ResultType.INVALID);
             return result;
+        }
+
+        // Generate a timestamp
+        if (review.getTimeStamp() == null) {
+            review.setTimeStamp(Timestamp.valueOf(LocalDateTime.now()));
         }
 
         review = repository.add(review);
