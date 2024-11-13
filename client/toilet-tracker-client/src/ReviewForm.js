@@ -16,7 +16,7 @@ const REVIEW_DEFAULT = {
 function ReviewForm() {
     // STATE
 
-    const [review, setReview] = useState(REVIEW_DEFAULT);
+    const [review, setReview] = useState([REVIEW_DEFAULT]);
     const [errors, setErrors] = useState([]);
 
     const url = 'http://localhost:8080/api/review'
