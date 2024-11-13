@@ -16,16 +16,16 @@ const REVIEW_DEFAULT = {
 function ReviewForm() {
     // STATE
 
-    const [review, setReview] = useState([REVIEW_DEFAULT]);
+    const [review, setReview] = useState(REVIEW_DEFAULT);
     const [errors, setErrors] = useState([]);
-
+    
     const url = 'http://localhost:8080/api/review'
     const navigate = useNavigate();
-    const { id } = useParams();
+    const { reviewId } = useParams();
 
     useEffect(() =>{
-        if(id) {
-            fetch(`${url}/${id}`)
+        if(reviewId) {
+            fetch(`${url}/${reviewId}`)
             .then(response => {
                 if(response.status === 200) {
                     return response.json();
@@ -40,12 +40,12 @@ function ReviewForm() {
         }else{
             setReview(REVIEW_DEFAULT);
         }
-    }, [id]);
+    }, [reviewId]);
 
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        if(id) {
+        if(reviewId) {
             updateReview();
         }else {
             addReview();
@@ -90,7 +90,7 @@ function ReviewForm() {
     // updating review
     const updateReview = () => {
 
-        review.reviewId = id;
+        review.reviewId = reviewId;
         const init = {
             method: 'PUT',
             headers: {
@@ -98,7 +98,7 @@ function ReviewForm() {
             },
             body: JSON.stringify(review)
         }
-        fetch(`${url}/${id}`, init)
+        fetch(`${url}/${reviewId}`, init)
         .then(response =>{
             if(response.status === 204){
                 return null;
@@ -123,7 +123,7 @@ function ReviewForm() {
 
     return(<>
             <section>
-                <h2 className="mb-4">{id > 0 ? 'Update Review' : 'Add Review'}</h2>
+                <h2 className="mb-4">{reviewId > 0 ? 'Update Review' : 'Add Review'}</h2>
                     {errors.length > 0 && (
                         <div className="alert alert-danger">
                             <p>The following errors were found</p>
@@ -169,8 +169,8 @@ function ReviewForm() {
                             />
                         </fieldset>
                         <fieldset className="form-group">
-                            <button type="submit" className="btn btn-outline-success mr-4">{id > 0 ? 'Update Review' : 'Add Review'}</button>
-                            <Link type="button" className="btn btn-outline-danger mr-4" to={'/'}>Cancel</Link>
+                            <button type="submit" className="btn btn-outline-success mr-4">{reviewId > 0 ? 'Update Review' : 'Add Review'}</button>
+                            <Link type="button" className="btn btn-outline-danger mr-4" to={'/reviews'}>Cancel</Link>
                         </fieldset>
                     </form>
             </section>

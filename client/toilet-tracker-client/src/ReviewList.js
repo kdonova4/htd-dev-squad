@@ -6,7 +6,7 @@ const REVIEW_DATA = [
 {
     reviewId: 1,
     rating: 1,
-    reviewText: 'oijsoignoinrg',
+    reviewText: 'This is a review',
     timeStamp: '2024-05-05 22:34:38',
     used: '2020-9-20'
 
@@ -14,16 +14,16 @@ const REVIEW_DATA = [
 
 {
     reviewId: 2,
-    rating: 1,
-    reviewText: 'oijsoignoinrg',
+    rating: 5,
+    reviewText: 'This is a review',
     timeStamp: '2024-05-05 22:34:38',
     used: '2020-9-20'
 
 },
 {
     reviewId: 3,
-    rating: 1,
-    reviewText: 'oijsoignoinrg',
+    rating: 4,
+    reviewText: 'This is a review',
     timeStamp: '2024-05-05 22:34:38',
     used: '2020-9-20'
 
@@ -31,7 +31,7 @@ const REVIEW_DATA = [
 {
     reviewId: 4,
     rating: 1,
-    reviewText: 'oijsoignoinrg',
+    reviewText: 'This is a review',
     timeStamp: '2024-05-05 22:34:38',
     used: '2020-9-20'
 
@@ -41,12 +41,12 @@ const REVIEW_DATA = [
 
 function ReviewList() {
 
-    const[reviews, setReviews] = useState(REVIEW_DATA);
+    const[reviews, setReviews] = useState([]);
     const url = 'http://localhost:8080/api/review'
 
     useEffect(() => {
 
-        fetch(url)
+       fetch(`${url}/1`) // restroom Id
         .then(response => {
             if(response.status === 200) {
                 return response.json();
@@ -54,7 +54,10 @@ function ReviewList() {
                 return Promise.reject(`Unexpected Status Code: ${response.status}`);
             }
         })
-        .then(data => setReviews(data))
+        .then(data => {
+            setReviews(data)
+            console.log(data)
+        })
         .catch(console.log)
     }, [])
 
@@ -85,15 +88,16 @@ function ReviewList() {
     return(<>
         <section className="container">
                     <h2 className="mb-4">Reviews</h2>
-                    <Link className="btn btn-outline-success mb-4" to={'/review/add'}>Add a Review</Link>
+                    <Link className="btn btn-outline-success mb-4" to={'/review/new'}>Add a Review</Link>
                     
                     {reviews.map(review => (
-                    <div className="media-body pb-3 mb-0 small 1h-125 border-bottom border-gray">
+                    <div key={review.reviewId} className="media-body pb-3 mb-0 small 1h-125 border-bottom border-gray">
                         <h5><span className="review-rating">{review.rating}</span></h5>
-                        <p>{review.used}</p>
+                        <p>Date Used: {review.used}</p>
                         <p>
                             <strong className="d-block text-gray-dark">{review.reviewText}</strong>
                         </p>
+                        <footer>{review.timeStamp}</footer>
                     </div>
                     ))}
 
@@ -104,27 +108,3 @@ function ReviewList() {
 export default ReviewList;
 
 
-{/* <li class="mb-4">
-            <div class="card p-3 shadow-sm">
-                <h5 class="card-title">Review by Jane Smith</h5>
-                <p class="card-subtitle text-muted">Date: 2024-11-02</p>
-                <p class="card-text mt-3">"It worked as expected, but there were a few issues. Overall, a decent experience."</p>
-            </div>
-        </li> */}
-
-
-//         <ul className="list-unstyled">
-//                     {reviews.map(review => (
-
-//                     <li key={review.reviewId} className="review-item mb-4 p-3 border rounded shadow-sm">
-//                         <div>
-//                             <h5>{review.rating}</h5>
-//                             <p>{review.used}</p>
-//                             <p>{review.reviewText}</p>
-//                         </div>
-//                         <Link className="btn btn-outline-warning mr-4" to={`/agent/edit/${review.reviewId}`}>Update</Link>
-//                         <button className="btn btn-outline-danger" onClick={() => handleDeleteReview(review.reviewId)}>Delete</button>
-//                     </li>
-
-//                         ))}
-// </ul>
