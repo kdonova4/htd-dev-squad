@@ -86,6 +86,10 @@ public class ReviewService {
             result.addMessage("Date Used cannot be null", ResultType.INVALID);
         }
 
+        if (review.getTimeStamp() == null) {
+            result.addMessage("Timestamp Used cannot be null", ResultType.INVALID);
+        }
+
         return result;
 
 
