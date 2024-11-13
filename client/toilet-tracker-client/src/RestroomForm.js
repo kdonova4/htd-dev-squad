@@ -25,9 +25,6 @@ const RESTROOM_DEFAULT = {
     amenities: []
 }
 
-const amenitiesList = ['Wi-Fi', 'Handicap Accessible', 'Changing Table', 'Restroom with Showers']; // Example amenities
-
-
 const RestroomForm = () => {
     const [restroom, setRestroom] = useState(RESTROOM_DEFAULT);
 
@@ -35,12 +32,27 @@ const RestroomForm = () => {
     const [errors, setErrors] = useState('');
     const [position, setPosition] = useState([0, 0]);
     const [manualEntry, setManualEntry] = useState(false);
+    const [amenities, setAmenities] = useState([]);
     const navigate = useNavigate();
     const { restroomId } = useParams();
     const url = 'http://localhost:8080/api/restroom';
+    const amenitiesUrl = 'http://localhost:8080/api/amenity';
 
     useEffect(() => {
-        if (restroomId) { //updating - we want to populate the form with the restroom being updated
+        fetch(amenitiesUrl)
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    return Promise.reject(`Unexpected Status Code: ${response.status}`);
+                }
+            })
+            .then(data => {
+                setAmenities(data); // Assuming data is an array of amenities with id and name
+            })
+            .catch(console.log);
+
+        if (restroomId) {
             fetch(`${url}/${restroomId}`)
                 .then(response => {
                     if (response.status === 200) {
@@ -50,14 +62,13 @@ const RestroomForm = () => {
                     }
                 })
                 .then(data => {
-                    setRestroom(data)
+                    setRestroom(data);
                 })
-                .catch(console.log)
-        } else { // if there is no restroomId in url param that means we are adding - so we just want to reset the form back to the default
+                .catch(console.log);
+        } else {
             setRestroom(RESTROOM_DEFAULT);
         }
-
-    }, [restroomId]); //Hey React, please call my useEffect function every time the restroomId in the url changes
+    }, [restroomId]);
 
     const handleManualEntryToggle = () => {
         setManualEntry(!manualEntry);
@@ -230,13 +241,13 @@ const RestroomForm = () => {
                         </Form.Group>
                         <Form.Group controlId="amenities">
                             <Form.Label>Amenities</Form.Label>
-                            {amenitiesList.map((amenity) => (
+                            {amenities.map((amenity) => (
                                 <Form.Check
-                                    key={amenity}
+                                    key={amenity.id}
                                     type="checkbox"
-                                    label={amenity}
-                                    value={amenity}
-                                    checked={restroom.amenities.includes(amenity)}
+                                    label={amenity.name}
+                                    value={amenity.id}
+                                    checked={restroom.amenities.includes(amenity.id)}
                                     onChange={handleAmenityChange}
                                 />
                             ))}

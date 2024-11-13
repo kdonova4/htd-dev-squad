@@ -12,7 +12,6 @@
     "react-bootstrap": "^2.10.5",
     "react-dom": "^18.3.1",
     "react-leaflet": "^4.2.1",
-    "react-leaflet-geosearch": "^0.3.4",
     "react-router-dom": "^6.0.2",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
