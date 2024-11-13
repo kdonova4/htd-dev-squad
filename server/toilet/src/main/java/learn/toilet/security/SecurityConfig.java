@@ -1,6 +1,7 @@
 package learn.toilet.security;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -29,7 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/api/user/authenticate").permitAll()
                 .antMatchers("/api/user/register").permitAll()
-                .antMatchers("/api/admin/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/api/restroom").permitAll()  // Allow GET requests to /public/**
+                .antMatchers(HttpMethod.GET, "/api/review").permitAll()
+                .antMatchers("/api/amenity/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtRequestFilter(authenticationManager(), converter))
