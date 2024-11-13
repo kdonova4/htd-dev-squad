@@ -53,6 +53,7 @@ public class AuthController {
                 return new ResponseEntity<>(map, HttpStatus.OK);
             }
         } catch (AuthenticationException ex) {
+            System.out.println();
             System.out.println(ex);
         }
 
