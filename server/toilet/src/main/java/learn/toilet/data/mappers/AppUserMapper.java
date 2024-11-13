@@ -19,7 +19,7 @@ public class AppUserMapper implements RowMapper<AppUser> {
         return new AppUser(
                 rs.getInt("app_user_id"),
                 rs.getString("username"),
-                rs.getString("first_name"),
+                rs.getString("password_hash"),
                 rs.getBoolean("disabled"),
                 roles);
     }
