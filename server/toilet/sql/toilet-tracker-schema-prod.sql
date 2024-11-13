@@ -105,5 +105,14 @@ insert into review (review_id, rating, review_text, `timestamp`, date_used, rest
 (2, 5, 'Immaculate and well-maintained.', '2024-11-10 09:15:00', '2024-10-15', 2, 1),
 (3, 2, 'Could use some cleaning.', '2024-11-09 18:20:00', '2024-09-05', 1, 2);
 
+insert into app_role (`name`) values
+    ('USER'),
+    ('ADMIN');
+
+insert into app_user_role
+    values
+    (1, 2),
+    (2, 1);
+
 
 
