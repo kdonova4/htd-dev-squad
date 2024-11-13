@@ -26,6 +26,15 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository{
     }
 
     @Override
+    public Review findById(int reviewId) {
+        final String sql = "select review_id, rating, review_text, timestamp, date_used, restroom_id, app_user_id "
+                + "from review "
+                + "where review_id = ?;";
+
+        return jdbcTemplate.query(sql, new ReviewMapper(), reviewId).stream().findFirst().orElse(null);
+    }
+
+    @Override
     public List<Review> findByUserId(int userId)
     {
         final String sql = "select review_id, rating, review_text, timestamp, date_used, restroom_id, app_user_id "

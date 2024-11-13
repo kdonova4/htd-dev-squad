@@ -57,7 +57,7 @@ public class AmenityControllerTest {
     @Test
     void addShouldReturn400WhenEmpty() throws Exception {
 
-        var request = post("/api/amenity")
+        var request = post("/api/admin/amenity")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token);
 
@@ -73,7 +73,7 @@ public class AmenityControllerTest {
         Amenity amenity = new Amenity();
         String amenityJson = jsonMapper.writeValueAsString(amenity);
 
-        var request = post("/api/amenity")
+        var request = post("/api/admin/amenity")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
                 .content(amenityJson);
@@ -90,7 +90,7 @@ public class AmenityControllerTest {
         Amenity amenity = new Amenity(0, "New Amenity");
         String amenityJson = jsonMapper.writeValueAsString(amenity);
 
-        var request = post("/api/amenity")
+        var request = post("/api/admin/amenity")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .header("Authorization", "Bearer " + token)
                 .content(amenityJson);
@@ -111,7 +111,7 @@ public class AmenityControllerTest {
         String amenityJson = jsonMapper.writeValueAsString(amenity);
         String expectedJson = jsonMapper.writeValueAsString(expected);
 
-        var request = post("/api/amenity")
+        var request = post("/api/admin/amenity")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
                 .content(amenityJson);
@@ -132,7 +132,7 @@ public class AmenityControllerTest {
         ObjectMapper jsonMapper = new ObjectMapper();
         String amenityJson = jsonMapper.writeValueAsString(amenity);
 
-        var request = put("/api/amenity/1")
+        var request = put("/api/admin/amenity/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
                 .content(amenityJson);
@@ -148,7 +148,7 @@ public class AmenityControllerTest {
         ObjectMapper jsonMapper = new ObjectMapper();
         String amenityJson = jsonMapper.writeValueAsString(amenity);
 
-        var request = put("/api/amenity/1")
+        var request = put("/api/admin/amenity/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
                 .content(amenityJson);
@@ -165,7 +165,7 @@ public class AmenityControllerTest {
         ObjectMapper jsonMapper = new ObjectMapper();
         String amenityJson = jsonMapper.writeValueAsString(amenity);
 
-        var request = put("/api/amenity/9")
+        var request = put("/api/admin/amenity/9")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
                 .content(amenityJson);
@@ -182,7 +182,7 @@ public class AmenityControllerTest {
         when(amenityRepository.deleteById(1)).thenReturn(true);
 
 
-        var request = delete("/api/amenity/1")
+        var request = delete("/api/admin/amenity/1")
                 .header("Authorization", "Bearer " + token);
 
         mvc.perform(request)
@@ -193,7 +193,7 @@ public class AmenityControllerTest {
     void deleteShouldReturn404NotFoundWhenMissing() throws Exception {
         when(amenityRepository.deleteById(1)).thenReturn(false);
 
-        var request = delete("/api/amenity/1")
+        var request = delete("/api/admin/amenity/1")
                 .header("Authorization", "Bearer " + token);
 
         // Assert: Expecting 404 Not found as response
