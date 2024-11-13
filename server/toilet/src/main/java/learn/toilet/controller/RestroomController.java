@@ -112,7 +112,7 @@ public class RestroomController {
         Restroom restroom = restroomService.findById(restroomId);
 
         // Ensure that the restroom's userId matches the authenticated user's userId
-        if (restroom.getUserId() != authenticatedUserId) {
+        if (restroom != null && restroom.getUserId() != authenticatedUserId) {
             return new ResponseEntity<>("You are not authorized to create a restroom entry for another user.", HttpStatus.FORBIDDEN);
         }
 

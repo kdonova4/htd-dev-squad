@@ -40,7 +40,7 @@ public class RestroomAmenityController {
         Restroom restroom = service.findById(restroomAmenity.getRestroomId());
 
         // Ensure that the restroom's userId matches the authenticated user's userId
-        if (restroom.getUserId() != authenticatedUserId) {
+        if (restroom != null && restroom.getUserId() != authenticatedUserId) {
             return new ResponseEntity<>("You are not authorized to associate amenity with bathroom created by another user.", HttpStatus.FORBIDDEN);
         }
 
@@ -66,7 +66,7 @@ public class RestroomAmenityController {
         Restroom restroom = service.findById(restroomId);
 
         // Ensure that the restroom's userId matches the authenticated user's userId
-        if (restroom.getUserId() != authenticatedUserId) {
+        if (restroom != null && restroom.getUserId() != authenticatedUserId) {
             return new ResponseEntity<>("You are not authorized to delete association between amenity and bathroom created by another user.", HttpStatus.FORBIDDEN);
         }
 

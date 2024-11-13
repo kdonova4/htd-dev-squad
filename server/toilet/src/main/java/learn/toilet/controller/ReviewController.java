@@ -71,6 +71,10 @@ public class ReviewController {
 
     @PutMapping("/{reviewId}")
     public ResponseEntity<Object> update(@PathVariable int reviewId, @RequestBody Review review) {
+        if(reviewId != review.getReviewId()) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
         // Get the authenticated username from the JWT token
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -83,9 +87,6 @@ public class ReviewController {
         // Ensure that the restroom's userId matches the authenticated user's userId
         if (review.getUserId() != authenticatedUserId) {
             return new ResponseEntity<>("You are not authorized to create a restroom entry for another user.", HttpStatus.FORBIDDEN);
-        }
-        if(reviewId != review.getReviewId()) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
         Result<Review> result = service.update(review);
@@ -107,10 +108,10 @@ public class ReviewController {
         // Get user id from AppUser
         int authenticatedUserId = user.getAppUserId();
 
-        Review review = service.findById(authenticatedUserId);
+        Review review = service.findById(reviewId);
 
         // Ensure that the restroom's userId matches the authenticated user's userId
-        if (review.getUserId() != authenticatedUserId) {
+        if (review != null && review.getUserId() != authenticatedUserId) {
             return new ResponseEntity<>("You are not authorized to create a restroom entry for another user.", HttpStatus.FORBIDDEN);
         }
         if(service.deleteById(reviewId)) {
