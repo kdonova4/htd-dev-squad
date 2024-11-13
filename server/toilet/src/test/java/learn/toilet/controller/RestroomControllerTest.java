@@ -78,15 +78,9 @@ public class RestroomControllerTest {
     @Test
     void addShouldReturn400WhenInvalid() throws Exception {
 
-        ObjectMapper jsonMapper = new ObjectMapper();
-
-        Restroom restroom = new Restroom();
-        String restroomJson = jsonMapper.writeValueAsString(restroom);
-
         var request = post("/api/restroom")
                 .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer " + token)
-                .content(restroomJson);
+                .header("Authorization", "Bearer " + token);
 
         mvc.perform(request)
                 .andExpect(status().isBadRequest());
@@ -98,12 +92,12 @@ public class RestroomControllerTest {
         ObjectMapper jsonMapper = new ObjectMapper();
 
         Restroom restroom = new Restroom(0, "bathroom", 40.748817, -73.985428, "10 apple street", "down the hall", "disgusting", 1);
-        String agencyJson = jsonMapper.writeValueAsString(restroom);
+        String restroomJson = jsonMapper.writeValueAsString(restroom);
 
         var request = post("/api/restroom")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .header("Authorization", "Bearer " + token)
-                .content(agencyJson);
+                .content(restroomJson);
 
         mvc.perform(request)
                 .andExpect(status().isUnsupportedMediaType());
@@ -113,7 +107,6 @@ public class RestroomControllerTest {
     @Test
     void addShouldReturn201() throws Exception {
 
-        Timestamp t = new Timestamp(System.currentTimeMillis());
         Restroom restroom = new Restroom(0, "bathroom", 40.748817, -73.985428, "10 apple street", "down the hall", "disgusting", 1);
         Restroom expected = new Restroom(1, "bathroom", 40.748817, -73.985428, "10 apple street", "down the hall", "disgusting", 1);
         AppUser user = new AppUser(1, "1234", "$2a$10$QO8UzE8TDb1N6BQDwMTPGeV6HMYhgeffflkj4vwZ0jxDrhplKP8Yq", true, List.of("admin"));
@@ -136,7 +129,6 @@ public class RestroomControllerTest {
 
     @Test
     void updateShouldReturn204NoContent() throws Exception {
-        Timestamp t = new Timestamp(System.currentTimeMillis());
         Restroom restroom = new Restroom(1, "UPDATE", 40.748817, -73.985428, "10 apple street", "down the hall", "disgusting", 1);
         AppUser user = new AppUser(1, "1234", "$2a$10$QO8UzE8TDb1N6BQDwMTPGeV6HMYhgeffflkj4vwZ0jxDrhplKP8Yq", true, List.of("admin"));
 
@@ -154,13 +146,42 @@ public class RestroomControllerTest {
                 .andExpect(status().isNoContent());
     }
 
+    @Test
+    void updateShouldReturn400WhenInvalid() throws Exception {
+        Restroom restroom = new Restroom(1, null, 40.748817, -73.985428, "10 apple street", "down the hall", "disgusting", 1);
+
+        String restroomJson = jsonMapper.writeValueAsString(restroom);
+
+        var request = put("/api/restroom/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
+                .content(restroomJson);
+
+        mvc.perform(request)
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    void updateShouldReturn409WhenIdsDoNotMatch() throws Exception {
+        Restroom restroom = new Restroom(1, "UPDATE", 40.748817, -73.985428, "10 apple street", "down the hall", "disgusting", 1);
+
+        String restroomJson = jsonMapper.writeValueAsString(restroom);
+
+        var request = put("/api/restroom/9")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + token)
+                .content(restroomJson);
+
+        mvc.perform(request)
+                .andExpect(status().isConflict());
+    }
+
 
     @Test
     void deleteShouldReturn204NoContent() throws Exception {
 
-
         when(repository.deleteById(1)).thenReturn(true);
-
 
         var request = delete("/api/restroom/1")
                 .header("Authorization", "Bearer " + token);
@@ -168,6 +189,18 @@ public class RestroomControllerTest {
         // Assert: Expecting 204 No Content as response
         mvc.perform(request)
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteShouldReturn404NotFoundWhenMissing() throws Exception {
+        when(repository.deleteById(1)).thenReturn(false);
+
+        var request = delete("/api/restroom/1")
+                .header("Authorization", "Bearer " + token);
+
+        // Assert: Expecting 404 Not found as response
+        mvc.perform(request)
+                .andExpect(status().isNotFound());
     }
 
 }
