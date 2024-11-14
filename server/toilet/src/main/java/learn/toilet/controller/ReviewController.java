@@ -46,7 +46,7 @@ public class ReviewController {
         return ResponseEntity.ok(reviews);
     }
 
-    @GetMapping("/{restroomId}")
+    @GetMapping("/restroom/{restroomId}")
     public List<Review> findByRestroomId(@PathVariable int restroomId) {
         return service.findByRestroomId(restroomId);
     }

@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { Form, Button, Container, Alert, Row, Col } from 'react-bootstrap';
+import { jwtDecode } from "jwt-decode";
 
 const REVIEW_DEFAULT = {
 
     rating: 1,
     reviewText: '',
     timeStamp: '',
-    used: ''
+    used: '',
+    restroomId: null,
+    userId: null
 
 }
 
@@ -15,13 +18,22 @@ const REVIEW_DEFAULT = {
 
 function ReviewForm() {
     // STATE
-
-    const [review, setReview] = useState(REVIEW_DEFAULT);
+    const token = localStorage.getItem("token");
+    console.log("TOKEN", token);
+    let decodedToken;
+    if (token) {
+      decodedToken = jwtDecode(token);
+      console.log("decodedtoken", decodedToken.appUserId);
+      //   userId = decodedToken.userId || decodedToken.sub; // adjust based on your JWT structure
+      // access sub property to find user by username as sub property has username which was used to create jwt token
+    }
+    
     const [errors, setErrors] = useState('');
     const [success, setSuccess] = useState(false);
     const url = 'http://localhost:8080/api/review'
     const navigate = useNavigate();
-    const { reviewId } = useParams();
+    const { restroomId, reviewId } = useParams();
+    const [review, setReview] = useState(REVIEW_DEFAULT);
 
     useEffect(() =>{
         if(reviewId) {
@@ -73,7 +85,11 @@ function ReviewForm() {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify(review)
+            body: JSON.stringify({
+                ...review,
+                restroomId: 1,
+                userId: parseInt(decodedToken.appUserId)
+            })
         }
         fetch(url, init)
         .then(response => {

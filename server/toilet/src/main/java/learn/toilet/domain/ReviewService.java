@@ -33,6 +33,13 @@ public class ReviewService {
     }
 
     public Result<Review> add(Review review) {
+
+        // Generate a timestamp
+        if (review.getTimeStamp() == null) {
+            review.setTimeStamp(Timestamp.valueOf(ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime()));
+        }
+
+
         Result<Review> result = validate(review);
 
         if(!result.isSuccess()) {
@@ -42,11 +49,6 @@ public class ReviewService {
         if(review.getReviewId() != 0){
             result.addMessage("reviewId must be set for `add` operation", ResultType.INVALID);
             return result;
-        }
-
-        // Generate a timestamp
-        if (review.getTimeStamp() == null) {
-            review.setTimeStamp(Timestamp.valueOf(ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime()));
         }
 
 

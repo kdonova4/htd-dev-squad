@@ -21,10 +21,11 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<HomePage/>}/>
-            <Route path="/review/new" element={<ReviewForm/>}/>
+            <Route path="/reviews/new/" element={<ReviewForm/>}/>
             <Route path="/reviews/edit/:reviewId" element={<ReviewForm/>}/>
-            <Route path="/reviews/:type/:id" element={<ReviewPage/>} />
-            <Route path="/user/reviews" element={<ReviewPage/>} />
+            <Route path="/current" element={<ReviewPage type="user" />} />
+            <Route path="/restroom/:id" element={<ReviewPage type="restroom" />} />
+            <Route path="/current" element={<ReviewPage/>} />
             <Route path="/restrooms/new" element={<RestroomForm />} />
             <Route path="/restrooms" element={<RestroomList />} />
             <Route
