@@ -38,6 +38,15 @@ public class RestroomController {
         return restroomService.findByLocation(latitude, longitude);
     }
 
+    @GetMapping("/restrooms/{userId}")
+    public ResponseEntity<List<Restroom>> findByUserId(@PathVariable int userId) {
+        List<Restroom> restrooms = restroomService.findByUserId(userId);
+        if (restrooms == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(restrooms);
+    }
+
     @GetMapping("/{restroomId}")
     public ResponseEntity<Restroom> findById(@PathVariable int restroomId) {
         Restroom restroom = restroomService.findById(restroomId);

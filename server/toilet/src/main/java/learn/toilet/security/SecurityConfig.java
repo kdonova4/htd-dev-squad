@@ -33,6 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/api/restroom").permitAll()  // Allow GET requests to /public/**
                 .antMatchers(HttpMethod.GET, "/api/restroom/{restroomId}").permitAll()  // Allow GET requests to /public/**
                 .antMatchers(HttpMethod.GET, "/api/review").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/review/restroom/reviews/{restroomId}").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/review/{reviewId}").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/review/restroom/reviews/{restroomId}").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/restroom/search").permitAll()

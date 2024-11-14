@@ -23,13 +23,13 @@ function ReviewForm() {
     const [success, setSuccess] = useState(false);
     const url = 'http://localhost:8080/api/review';
     const navigate = useNavigate();
-    const { restroomId, reviewId } = useParams(); // Extract restroomId and reviewId from the URL
+    const { restroomId, reviewId } = useParams();
     const [review, setReview] = useState(REVIEW_DEFAULT);
 
-    // Fetch the review data for editing
+
     useEffect(() => {
         if (reviewId) {
-            // Fetch existing review details by reviewId
+
             fetch(`${url}/${reviewId}`)
                 .then(response => {
                     if (response.status === 200) {
@@ -39,27 +39,27 @@ function ReviewForm() {
                     }
                 })
                 .then(data => {
-                    setReview(data); // Fill the form with the existing review data
+                    setReview(data);
                 })
                 .catch(console.log);
         } else if (restroomId) {
-            // Set restroomId and userId for a new review
+
             setReview(prevReview => ({
                 ...prevReview,
                 restroomId: parseInt(restroomId),
                 userId: parseInt(decodedToken.appUserId)
             }));
         }
-    }, [reviewId, restroomId, decodedToken?.appUserId]); // Re-run effect when these params change
+    }, [reviewId, restroomId, decodedToken?.appUserId]);
 
     // Handle form submission
     const handleSubmit = (event) => {
         event.preventDefault();
         setSuccess(false);
         if (reviewId) {
-            updateReview();  // Update review if reviewId is present
+            updateReview();
         } else {
-            addReview();     // Add a new review if reviewId is absent
+            addReview();
         }
     };
 
@@ -71,7 +71,7 @@ function ReviewForm() {
 
     // Add a new review
     const addReview = () => {
-        review.userId = parseInt(decodedToken.appUserId); // Ensure the userId is set from token
+        review.userId = parseInt(decodedToken.appUserId);
         const init = {
             method: 'POST',
             headers: {
@@ -104,7 +104,7 @@ function ReviewForm() {
     // Update an existing review
     const updateReview = () => {
         review.reviewId = reviewId;
-        review.userId = parseInt(decodedToken.appUserId); // Ensure the userId is set from token
+        review.userId = parseInt(decodedToken.appUserId);
         const init = {
             method: 'PUT',
             headers: {
@@ -113,7 +113,7 @@ function ReviewForm() {
             },
             body: JSON.stringify({
                 ...review,
-                restroomId: parseInt(restroomId), // Include restroomId when updating
+                restroomId: parseInt(restroomId),
                 userId: parseInt(decodedToken.appUserId)
             }),
         };

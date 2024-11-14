@@ -1,6 +1,8 @@
+import RestroomList from "./RestroomList";
+
 function Search() {
     return(<>
-
+        <RestroomList/>
     </>)
 }
 

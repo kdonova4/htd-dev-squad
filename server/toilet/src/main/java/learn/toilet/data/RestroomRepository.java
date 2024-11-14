@@ -11,6 +11,8 @@ public interface RestroomRepository {
     @Transactional
     Restroom findById(int restroomId);
 
+    List<Restroom> findByUserId(int userId);
+
     Restroom add(Restroom restroom);
 
     boolean update(Restroom restroom);
