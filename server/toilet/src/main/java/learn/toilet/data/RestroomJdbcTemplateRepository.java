@@ -5,6 +5,7 @@ import learn.toilet.data.mappers.RestroomMapper;
 import learn.toilet.data.mappers.ReviewMapper;
 import learn.toilet.models.Restroom;
 import learn.toilet.data.RestroomRepository;
+import learn.toilet.models.Review;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -101,11 +102,25 @@ public class RestroomJdbcTemplateRepository implements RestroomRepository {
 
     private void addReviews(Restroom restroom) {
 
-        final String sql = "select review_id, rating, review_text, timestamp, date_used, restroom_id, app_user_id "
-                + "from review "
-                + "where restroom_id = ?";
+        final String sql = "select r.review_id, r.rating, r.review_text, r.timestamp, r.date_used, r.restroom_id, "
+                + "r.app_user_id, u.username "
+                + "from review r "
+                + "inner join app_user u on r.app_user_id = u.app_user_id "
+                + "where r.restroom_id = ?";
 
-        var reviews = jdbcTemplate.query(sql, new ReviewMapper(), restroom.getRestroomId());
+        var reviews = jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Review review = new Review();
+            review.setReviewId(rs.getInt("review_id"));
+            review.setRating(rs.getInt("rating"));
+            review.setReviewText(rs.getString("review_text"));
+            review.setTimeStamp(rs.getTimestamp("timestamp"));
+            review.setUsed(rs.getDate("date_used").toLocalDate());
+            review.setRestroomId(rs.getInt("restroom_id"));
+            review.setUserId(rs.getInt("app_user_id"));
+            review.setUsername(rs.getString("username")); // Set the username directly
+            return review;
+        }, restroom.getRestroomId());
+
         restroom.setReviews(reviews);
     }
 
