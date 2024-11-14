@@ -52,25 +52,14 @@ public class RestroomJdbcTemplateRepository implements RestroomRepository {
     }
 
     @Override
-    @Transactional
-    public List<Restroom> findByUserId(int userId) {
+    public List<Restroom> findByUserId(int userId)
+    {
         final String sql = "select restroom_id, `name`, address, latitude, longitude, directions, `description` "
                 + "from restroom "
                 + "where app_user_id = ?;";
 
-        List<Restroom> restrooms = jdbcTemplate.query(sql, new RestroomMapper(), userId);
-
-        // For each restroom found, add associated reviews and amenities
-        for (Restroom restroom : restrooms) {
-            addReviews(restroom);
-            addAmenities(restroom);
-        }
-
-        return restrooms;
+        return jdbcTemplate.query(sql, new RestroomMapper(), userId);
     }
-
-
-
 
     @Override
     public Restroom add(Restroom restroom) {

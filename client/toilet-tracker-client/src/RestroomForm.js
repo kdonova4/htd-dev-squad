@@ -197,7 +197,7 @@ const RestroomForm = () => {
       .then((data) => {
         if (!data) {
           // happy path
-          navigate("/");
+          navigate("/profile");
         } else {
           //unhappy
           // get our errors messages and diplay them

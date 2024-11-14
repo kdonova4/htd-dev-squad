@@ -7,7 +7,9 @@ import { useRestrooms } from "./context/RestroomContext";
 
 function UserProfile() {
     const [restrooms, setRestrooms] = useState([]);
+    const [reviews, setReviews] = useState([]);
     const url = 'http://localhost:8080/api/restroom';
+    const reviewUrl = `http://localhost:8080/api/review`;
     const token = localStorage.getItem("token");
     let decodedToken;
     if (token) {
@@ -17,9 +19,7 @@ function UserProfile() {
     useEffect(() => {
         let fetchUrl;
 
-
-        fetchUrl = `${url}/restrooms/${decodedToken.appUserId}`; // Fetch restrooms by userId
-
+        fetchUrl = `${url}/current`; // Fetch restrooms by userId
 
         const headers = {
             'Content-Type': 'application/json',
@@ -35,10 +35,39 @@ function UserProfile() {
                 }
             })
             .then(data => {
+                console.log(data)
                 setRestrooms(data); // Set the retrieved restrooms in state
             })
             .catch(console.log);
     }, [decodedToken]);
+
+    useEffect(() => {
+        let fetchUrl;
+
+        fetchUrl = `${reviewUrl}/current`;
+
+
+        const headers = {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        };
+        fetch(fetchUrl, { headers })
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    return Promise.reject(`Unexpected Status Code: ${response.status}`);
+                }
+            })
+            .then(data => {
+                setReviews(data);
+
+                const userIds = [...new Set(data.map(review => review.userId))];
+
+
+            })
+            .catch(console.log);
+    }, [token])
 
     const username = decodedToken.sub;
 
@@ -52,7 +81,7 @@ function UserProfile() {
     <Row>
         <Col md={6} className="p-4">
             <h2>{username}'s Profile</h2>
-            <ReviewPage type="user" id={decodedToken?.sub} />
+            <ReviewPage reviews={reviews} />
         </Col>
         <Col md={6} className="p-4">
             <Row className="justify-content-center w-100 mb-4">
