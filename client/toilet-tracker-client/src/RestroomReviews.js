@@ -79,6 +79,7 @@ function RestroomReviews() {
                     </div>
                 </Col>
                 <Col md={6} className="p-4">
+
                     <h2>Location</h2>
                     {restroom.latitude && restroom.longitude ? (
                         <MapContainer
@@ -100,6 +101,7 @@ function RestroomReviews() {
                     ) : (
                         <p>Loading map...</p>
                     )}
+
                 </Col>
             </Row>
             <Link className="btn btn-outline-success mb-4" to={`/reviews/${restroomId}/new`}>Add a Review</Link>
