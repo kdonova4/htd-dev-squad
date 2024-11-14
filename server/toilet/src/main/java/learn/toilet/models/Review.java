@@ -12,9 +12,13 @@ public class Review {
     private int reviewId;
     private int rating;
     private String reviewText;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MMM d, yyyy, h:mm a")
     private Timestamp timeStamp;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate used;
+
     private int restroomId;
     private int userId;
 
