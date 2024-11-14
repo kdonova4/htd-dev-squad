@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./context/AuthContext"; // Import the AuthContext
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -7,16 +8,15 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth(); // Destructure login from useAuth
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setLoading(true);
     setError("");
 
-    const payload = {
-      username,
-      password,
-    };
+    const payload = { username, password };
 
     try {
       const response = await fetch(
@@ -34,10 +34,9 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-        localStorage.setItem("token", data.jwt_token); // Store the token in localStorage
+        login(data.jwt_token); // Use the login function to set the token
         navigate("/"); // Redirect to the dashboard or home page
       } else {
-        // Handle error response
         const errorMessage = await response.text();
         setError(
           errorMessage || "Login failed. Please check your credentials."
