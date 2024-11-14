@@ -60,10 +60,6 @@ public class RestroomService {
         return restroomRepository.findById(restroomId);
     }
 
-    public List<Restroom> findByUserId(int userId) {
-        return restroomRepository.findByUserId(userId);
-    }
-
     public Result<Restroom> add(Restroom restroom) {
         Result<Restroom> result = validate(restroom);
         if (!result.isSuccess()) {
