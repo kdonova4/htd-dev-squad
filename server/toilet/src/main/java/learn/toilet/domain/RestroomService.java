@@ -28,6 +28,10 @@ public class RestroomService {
         return restroomRepository.findAll();
     }
 
+    public List<Restroom> findByUserId(int userId){
+        return restroomRepository.findByUserId(userId);
+    }
+
     public List<Restroom> findByLocation(double latitude, double longitude) {
         double radiusInMiles = 5.0;
 

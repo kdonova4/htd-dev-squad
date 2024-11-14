@@ -13,6 +13,7 @@ function ReviewList({ reviews }) {
     const token = localStorage.getItem("token");
     let decodedToken;
 
+
     if (token) {
         try {
             decodedToken = jwtDecode(token);
@@ -21,7 +22,9 @@ function ReviewList({ reviews }) {
         }
     }
 
+
     const handleDeleteReview = (reviewId) => {
+
         if (window.confirm(`Delete Review?`)) {
             const token = localStorage.getItem("token");
             const headers = {
@@ -37,7 +40,9 @@ function ReviewList({ reviews }) {
             fetch(`${url}/${reviewId}`, init)
                 .then(response => {
                     if (response.status === 204) {
+
                         const newReviews = reviewState.filter(r => r.reviewId !== reviewId);
+
                         setReviews(newReviews);
                     } else {
                         return Promise.reject(`Unexpected Status Code ${response.status}`);
@@ -46,6 +51,8 @@ function ReviewList({ reviews }) {
                 .catch(console.log);
         }
     };
+
+
 
     return (
         <section className="container">
@@ -68,6 +75,7 @@ function ReviewList({ reviews }) {
                         <footer>{new Date(review.timeStamp).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })}</footer>
 
                         {decodedToken && review.userId === decodedToken.appUserId && (
+
                             <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
                                 <Link className="btn btn-primary" to={`/reviews/${review.restroomId}/${review.reviewId}`} >Update</Link>
                                 <button className="btn btn-danger" onClick={() => handleDeleteReview(review.reviewId)}>Delete</button>

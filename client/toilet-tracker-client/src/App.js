@@ -7,16 +7,21 @@ import RestroomForm from "./RestroomForm";
 import NavBar from "./NavBar";
 import AmenityForm from "./AmenityForm";
 import AmenityList from "./AmenityList";
-import ReviewPage from "./ReviewPage";
+
 import ReviewList from "./ReviewList";
+
 import ReviewForm from "./ReviewForm";
 import { Container } from "react-bootstrap";
 import HomePage from "./Home";
 import RestroomList from "./RestroomList";
 import { jwtDecode } from "jwt-decode";
-import RestroomReviews from "./RestroomReviews";
+
+import ReviewPage from "./ReviewPage";
 import UserProfile from "./UserProfile";
+
+import RestroomReviews from "./RestroomReviews";
 import ProtectedRoute from "./ProtectedRoute";
+
 
 function App() {
   // Get the token from localStorage (or wherever it is stored)

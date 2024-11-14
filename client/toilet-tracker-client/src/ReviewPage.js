@@ -4,7 +4,7 @@ import ReviewList from "./ReviewList";
 function ReviewPage({ type, reviews }) {
     return (
         <div>
-            <ReviewList reviewType={type} reviews={reviews} />
+            <ReviewList reviews={reviews} />
         </div>
     );
 }

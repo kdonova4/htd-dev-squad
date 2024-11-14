@@ -5,27 +5,12 @@ import "leaflet-control-geocoder";
 import { useNavigate } from "react-router-dom";
 import { useRestrooms } from "./context/RestroomContext";
 
-const LocationSearchForm = () => {
+const LocationSearchForm = ({ onLocationChange }) => {
   const [address, setAddress] = useState("");
   const navigate = useNavigate();
   const { updateRestrooms } = useRestrooms();
 
   const handleAddressChange = (event) => setAddress(event.target.value);
-
-  const handleLocationFetch = (latitude, longitude) => {
-    fetch(
-      `http://localhost:8080/api/restroom/search?latitude=${latitude}&longitude=${longitude}`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        updateRestrooms(data);
-        navigate("/restrooms");
-      })
-      .catch((error) => {
-        alert("Error fetching restrooms data");
-        console.error(error);
-      });
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -33,7 +18,8 @@ const LocationSearchForm = () => {
     geocoder.geocode(address, (results) => {
       if (results && results.length > 0) {
         const { lat, lng } = results[0].center;
-        handleLocationFetch(lat, lng);
+        onLocationChange(lat, lng);  // Update the map center
+        navigate("/restrooms");
       } else {
         alert("Geocoding failed. Please try again with a different address.");
       }
@@ -43,8 +29,10 @@ const LocationSearchForm = () => {
   const handleGetCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        ({ coords: { latitude, longitude } }) =>
-          handleLocationFetch(latitude, longitude),
+        ({ coords: { latitude, longitude } }) => {
+          onLocationChange(latitude, longitude);  // Update the map center
+          navigate("/restrooms");
+        },
         () => alert("Unable to retrieve your location")
       );
     } else {

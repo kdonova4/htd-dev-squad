@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Link } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Register() {
@@ -77,6 +77,7 @@ function Register() {
 
           {error && <div className="alert alert-danger">{error}</div>}
 
+
           <button
             type="submit"
             className="btn btn-primary w-100"
@@ -86,6 +87,7 @@ function Register() {
           </button>
         </form>
       </div>
+
     </div>
   );
 }
