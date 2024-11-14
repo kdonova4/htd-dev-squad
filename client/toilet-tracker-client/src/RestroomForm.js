@@ -6,6 +6,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { jwtDecode } from "jwt-decode";
 import AddressSearch from "./AddressSearch.js"; // Import the AddressSearch component
+import { useLocation } from "./context/LocationContext.js";
 
 // Marker icon configuration for compatibility with Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -17,8 +18,8 @@ L.Icon.Default.mergeOptions({
 
 const RESTROOM_DEFAULT = {
   name: "",
-  latitude: "",
-  longitude: "",
+  latitude: 0,
+  longitude: 0,
   address: "",
   directions: "",
   description: "",
@@ -28,10 +29,10 @@ const RESTROOM_DEFAULT = {
 
 const RestroomForm = () => {
   const [restroom, setRestroom] = useState(RESTROOM_DEFAULT);
-
+  const { updateLocation } = useLocation();
   const [success, setSuccess] = useState(false);
-  const [errors, setErrors] = useState("");
-  const [position, setPosition] = useState([0, 0]);
+  const [errors, setErrors] = useState([]);
+  const [position, setPosition] = useState([51.505, -0.09]);
   const [manualEntry, setManualEntry] = useState(false);
   const [amenities, setAmenities] = useState([]);
   const navigate = useNavigate();
@@ -104,7 +105,8 @@ const RestroomForm = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     setSuccess(false);
-    setErrors("");
+    setErrors([]);
+    updateLocation([restroom.latitude, restroom.longitude]); // Update map center
     if (restroomId) {
       // checks to see if there is an restroomId in the url
       updateRestroom();
@@ -138,22 +140,31 @@ const RestroomForm = () => {
           userId: parseInt(decodedToken.appUserId),
         }),
       };
-      const response = fetch(url, init);
-      if (response.status === 201) {
-        setSuccess(true);
-        setRestroom({
-          name: "",
-          latitude: "",
-          longitude: "",
-          address: "",
-          directions: "",
-          description: "",
-          userId: decodedToken.appUserId,
-        });
-      }
+      fetch(url, init)
+        .then((response) => {
+          if (response.status === 201) {
+            return null;
+          } else if (response.status === 400) {
+            return response.json();
+          } else {
+            return Promise.reject(`Unexpected Status Code ${response.status}`);
+          }
+        })
+        .then((data) => {
+          if (!data) {
+            // happy path
+
+            navigate("/restrooms");
+          } else {
+            //unhappy
+            // get our errors messages and diplay them
+            setErrors(data);
+          }
+        })
+        .catch(console.log);
     } catch (err) {
       setErrors(
-        "Failed to add restroom. You may need to log in and / or input required fields.  Please try again."
+        ["Failed to add restroom. You may need to log in and / or input required fields.  Please try again."]
       );
     }
   };
@@ -176,6 +187,7 @@ const RestroomForm = () => {
       .then((response) => {
         if (response.status === 204) {
           return null;
+          navigate(`/restrooms`)
         } else if (response.status === 400) {
           return response.json();
         } else {
@@ -224,7 +236,16 @@ const RestroomForm = () => {
           {success && (
             <Alert variant="success">Restroom added successfully!</Alert>
           )}
-          {errors && <Alert variant="danger">{errors}</Alert>}
+          {errors.length > 0 && (
+            <div className="alert alert-danger">
+              <p>The following Errors were found:</p>
+              <ul>
+                {errors.map(error => (
+                  <li key={error}>{error}</li>
+                ))}
+              </ul>
+            </div>
+          )}
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="name">
               <Form.Label>Name</Form.Label>
