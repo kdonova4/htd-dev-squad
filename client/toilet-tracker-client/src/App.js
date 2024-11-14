@@ -5,23 +5,16 @@ import Login from "./Login";
 import Register from "./Register";
 import RestroomForm from "./RestroomForm";
 import NavBar from "./NavBar";
-<<<<<<< HEAD
 import AmenityForm from "./AmenityForm";
 import AmenityList from "./AmenityList";
-=======
-import ReviewPage from "./ReviewPage";
->>>>>>> dev
-import ReviewList from "./ReviewList";
 import ReviewForm from "./ReviewForm";
 import { Container } from "react-bootstrap";
 import HomePage from "./Home";
 import RestroomList from "./RestroomList";
-<<<<<<< HEAD
 import { jwtDecode } from "jwt-decode";
-=======
+import ReviewPage from "./ReviewPage";
 import RestroomReviews from "./RestroomReviews";
 import UserProfile from "./UserProfile";
->>>>>>> dev
 
 function App() {
   // Get the token from localStorage (or wherever it is stored)

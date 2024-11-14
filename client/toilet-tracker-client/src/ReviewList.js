@@ -7,15 +7,18 @@ function ReviewList({ reviewType, id }) {
     const [reviews, setReviews] = useState([]);
     const [usernames, setUsernames] = useState({});
     const { restroomId } = useParams();
-    
+
     const url = `http://localhost:8080/api/review`;
     const token = localStorage.getItem("token");
     let decodedToken;
-    if (token) {
-        decodedToken = jwtDecode(token);
-    }
 
-    
+if (token) {
+        try {
+            decodedToken = jwtDecode(token);
+        } catch (error) {
+            console.error("Invalid token:", error);
+        }
+    }
 
     useEffect(() => {
         let fetchUrl;
@@ -26,8 +29,8 @@ function ReviewList({ reviewType, id }) {
         }
 
         const headers = {
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
+            ...(token && { 'Authorization': `Bearer ${token}` })// Removed 'Authorization' header to allow access without a token
         };
 
         fetch(fetchUrl, { headers })
@@ -41,10 +44,8 @@ function ReviewList({ reviewType, id }) {
             .then(data => {
                 setReviews(data);
 
-                
                 const userIds = [...new Set(data.map(review => review.userId))];
 
-                
                 const fetchUsernames = async () => {
                     const fetchedUsernames = {};
                     for (let userId of userIds) {
@@ -54,7 +55,7 @@ function ReviewList({ reviewType, id }) {
                             fetchedUsernames[userId] = userData.username;
                         }
                     }
-                    setUsernames(fetchedUsernames); 
+                    setUsernames(fetchedUsernames);
                 };
 
                 fetchUsernames();
@@ -66,35 +67,35 @@ function ReviewList({ reviewType, id }) {
     //handle delete
     const handleDeleteReview = (reviewId) => {
         const review = reviews.find(r => r.reviewId === reviewId);
-        if(window.confirm(`Delete Review?`)) {
-            const token = localStorage.getItem("token"); 
+        if (window.confirm(`Delete Review?`)) {
+            const token = localStorage.getItem("token");
             const headers = {
-                'Authorization': `Bearer ${token}`, 
-                'Content-Type': 'application/json', 
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
             };
-    
+
             const init = {
                 method: 'DELETE',
-                headers: headers, 
+                headers: headers,
             };
-    
+
             fetch(`${url}/${reviewId}`, init)
-            .then(response => {
-                if(response.status === 204){
-                    
-                    const newReviews = reviews.filter(r => r.reviewId !== reviewId);
-                    
-                    setReviews(newReviews);
-                } else {
-                    return Promise.reject(`Unexpected Status Code ${response.status}`);
-                }
-            })
-            .catch(console.log);
+                .then(response => {
+                    if (response.status === 204) {
+
+                        const newReviews = reviews.filter(r => r.reviewId !== reviewId);
+
+                        setReviews(newReviews);
+                    } else {
+                        return Promise.reject(`Unexpected Status Code ${response.status}`);
+                    }
+                })
+                .catch(console.log);
         }
     };
 
 
-       
+
 
     return (
         <section className="container">
@@ -116,12 +117,12 @@ function ReviewList({ reviewType, id }) {
                         </p>
                         <footer>{new Date(review.timeStamp).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })}</footer>
 
-                        
+
                         {review.userId === decodedToken.appUserId && (
                             <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
                                 <Link className="btn btn-primary" to={`/reviews/${review.restroomId}/${review.reviewId}`} >Update</Link>
                                 <button className="btn btn-danger" onClick={() => handleDeleteReview(review.reviewId)}>Delete</button>
-                                </div>
+                            </div>
                         )}
                     </div>
                 ))

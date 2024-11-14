@@ -47,7 +47,7 @@ function RestroomReviews() {
                     <div><strong>Amenities:</strong> {restroom.amenities.map(amenity => amenity.name).join(", ")}</div>
                 </Col>
                 <Col md={6} className="p-4">
-                    
+
                 </Col>
             </Row>
             <Link className="btn btn-outline-success mb-4" to={`/reviews/${restroomId}/new`}>Add a Review</Link>

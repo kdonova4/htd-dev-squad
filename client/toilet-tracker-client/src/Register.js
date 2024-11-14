@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Link } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Register() {
@@ -69,9 +69,10 @@ function Register() {
 
         {error && <div className="error-message">{error}</div>}
 
-        <button type="submit" disabled={loading}>
+        <button className="btn btn-primary" type="submit" disabled={loading}>
           {loading ? "Registering..." : "Register"}
         </button>
+        
       </form>
     </div>
   );
