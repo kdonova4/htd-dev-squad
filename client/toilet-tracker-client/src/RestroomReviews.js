@@ -36,7 +36,6 @@ function RestroomReviews() {
                 const response = await fetch(`http://localhost:8080/api/restroom/${restroomId}`);
                 if (response.ok) {
                     const data = await response.json();
-                    console.log(data);
                     setRestroom(data);
                 } else {
                     console.error("Error fetching restroom data");
