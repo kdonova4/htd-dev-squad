@@ -19,7 +19,7 @@ function ReviewForm() {
         decodedToken = jwtDecode(token);
     }
 
-    const [errors, setErrors] = useState('');
+    const [errors, setErrors] = useState([]);
     const [success, setSuccess] = useState(false);
     const url = 'http://localhost:8080/api/review';
     const navigate = useNavigate();
@@ -144,7 +144,16 @@ function ReviewForm() {
                 <Col md={6} className="p-4">
                     <h2>{reviewId ? 'Update Review' : 'Add Review'}</h2>
                     {success && <Alert variant="success">Review added successfully!</Alert>}
-                    {errors && <Alert variant="danger">{errors}</Alert>}
+                    {errors.length > 0 && (
+                        <div className="alert alert-danger">
+                            <p>The following Errors were found:</p>
+                            <ul>
+                                {errors.map(error => (
+                                    <li key={error}>{error}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="name">
                             <Form.Label>Rating</Form.Label>
