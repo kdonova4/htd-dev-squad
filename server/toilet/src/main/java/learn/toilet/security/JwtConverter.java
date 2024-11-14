@@ -2,6 +2,7 @@ package learn.toilet.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import learn.toilet.models.AppUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -20,7 +21,7 @@ public class JwtConverter {
     private final int EXPIRATION_MINUTES = 15;
     private final int EXPIRATION_MILLIS = EXPIRATION_MINUTES * 60 * 1000;
 
-    public String getTokenFromUser(User user) {
+    public String getTokenFromUser(AppUser user) {
 
         String authorities = user.getAuthorities().stream()
                 .map(i -> i.getAuthority())
@@ -29,6 +30,7 @@ public class JwtConverter {
         return Jwts.builder()
                 .setIssuer(ISSUER)
                 .setSubject(user.getUsername())
+                .claim("appUserId", user.getAppUserId())
                 .claim("authorities", authorities)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MILLIS))
                 .signWith(key)
