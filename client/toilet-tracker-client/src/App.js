@@ -43,7 +43,14 @@ function App() {
         <Container>
           <Routes>
             <Route path="/about" element={<About />} />
-            <Route path="/register" element={<Register />} />
+            <Route
+              path="/register"
+              element={
+                <ProtectedRoute>
+                  <Register />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/login"
               element={
