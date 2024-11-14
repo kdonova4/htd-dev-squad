@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useNavigate, useParams, Link} from "react-router-dom";
 import ReviewPage from "./ReviewPage";
-import { useRestrooms } from "./RestroomContext";
+import { useRestrooms } from "./context/RestroomContext";
 
 function UserProfile() {
     const [restrooms, setRestrooms] = useState([]);
@@ -13,19 +13,19 @@ function UserProfile() {
     if (token) {
         decodedToken = jwtDecode(token);
     }
-       
+
     useEffect(() => {
         let fetchUrl;
-    
-       
+
+
         fetchUrl = `${url}/restrooms/${decodedToken.appUserId}`; // Fetch restrooms by userId
-        
-    
+
+
         const headers = {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         };
-    
+
         fetch(fetchUrl, { headers })
             .then(response => {
                 if (response.status === 200) {
@@ -38,7 +38,7 @@ function UserProfile() {
                 setRestrooms(data); // Set the retrieved restrooms in state
             })
             .catch(console.log);
-    }, [decodedToken]); 
+    }, [decodedToken]);
 
     const username = decodedToken.sub;
 
@@ -74,7 +74,7 @@ function UserProfile() {
                             <p>
                                 <strong className="d-block text-gray-dark">{restroom.description}</strong>
                             </p>
-                    
+
                             {restroom.userId === decodedToken.appUserId && (
                                 <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
                                     <Link className="btn btn-primary" to={`/restrooms/edit/${restroom.restroomId}`}>Update</Link>

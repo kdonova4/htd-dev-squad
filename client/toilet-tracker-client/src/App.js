@@ -8,7 +8,6 @@ import NavBar from "./NavBar";
 import AmenityForm from "./AmenityForm";
 import AmenityList from "./AmenityList";
 
-import ReviewPage from "./ReviewPage";
 import ReviewList from "./ReviewList";
 
 import ReviewForm from "./ReviewForm";
@@ -18,11 +17,9 @@ import RestroomList from "./RestroomList";
 import { jwtDecode } from "jwt-decode";
 
 import ReviewPage from "./ReviewPage";
-import RestroomReviews from "./RestroomReviews";
 import UserProfile from "./UserProfile";
 
 import RestroomReviews from "./RestroomReviews";
-import UserProfile from "./UserProfile";
 import ProtectedRoute from "./ProtectedRoute";
 
 
