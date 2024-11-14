@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -27,8 +28,13 @@ public class ReviewController {
         this.service = service;
     }
 
+    @GetMapping("/{reviewId}")
+    public Review findById(@PathVariable int reviewId){
+        return service.findById(reviewId);
+    }
+
     @GetMapping("/current")
-    public List<Review> findByUserId() {
+    public ResponseEntity<List<Review>> findByUserId() {
         // Get the authenticated username from the JWT token
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -38,10 +44,14 @@ public class ReviewController {
         // Get user id from AppUser
         int authenticatedUserId = user.getAppUserId();
 
-        return service.findByUserId(authenticatedUserId);
+        List<Review> reviews = service.findByUserId(authenticatedUserId);
+        if (reviews.isEmpty()) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+        return ResponseEntity.ok(reviews);
     }
 
-    @GetMapping("/{restroomId}")
+    @GetMapping("/restroom/reviews/{restroomId}")
     public List<Review> findByRestroomId(@PathVariable int restroomId) {
         return service.findByRestroomId(restroomId);
     }
@@ -69,12 +79,12 @@ public class ReviewController {
         return ErrorResponse.build(result);
     }
 
-    @PutMapping("/{reviewId}")
+    @PutMapping("/{restroomId}/{reviewId}")
     public ResponseEntity<Object> update(@PathVariable int reviewId, @RequestBody Review review) {
         if(reviewId != review.getReviewId()) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-
+        System.out.println(review.getUserId());
         // Get the authenticated username from the JWT token
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

@@ -23,6 +23,7 @@ function BasicExample() {
             <Nav.Link as={Link} to={"/restrooms/new"}>Add New Restroom</Nav.Link>
             <Nav.Link as={Link} to={"/about"}>About</Nav.Link>
             <Nav.Link as={Link} to={"/login"}>Log In</Nav.Link>
+            <Nav.Link as={Link} to={"/profile"}>Profile</Nav.Link>
             {/* <NavDropdown title="Dropdown" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
               <NavDropdown.Item href="#action/3.2">
