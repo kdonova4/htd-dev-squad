@@ -96,6 +96,7 @@ insert into restroom (restroom_id, `name`, latitude, longitude, address, directi
 (1, "bathroom", 40.748817, -73.985428, '10 apple street', "down the hall", "disgusting", 1),
 (2, "Central Park Restroom", 40.785091, -73.968285, '5 Central Park Ave', "near the main entrance", "clean but crowded", 2);
 
+
 insert into restroom_amenity (amenity_id, restroom_id) values
 (1, 1),
 (2, 1);
@@ -115,4 +116,9 @@ insert into app_user_role
     (2, 1);
 
 
+insert into review (review_id, rating, review_text, `timestamp`, date_used, restroom_id, app_user_id) values
+(4, 2, 'Could use some cleaning.', '2024-10-10T06:12:07.848+00:00', '2024-09-05', 1, 2);
 
+
+
+select * from restroom;

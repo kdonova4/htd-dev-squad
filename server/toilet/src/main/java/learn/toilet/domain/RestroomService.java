@@ -5,6 +5,7 @@ import learn.toilet.data.RestroomAmenityRepository;
 import learn.toilet.data.RestroomRepository;
 import learn.toilet.models.Restroom;
 import learn.toilet.models.RestroomAmenity;
+import learn.toilet.models.Review;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,10 @@ public class RestroomService {
 
     public List<Restroom> findAll() {
         return restroomRepository.findAll();
+    }
+
+    public List<Restroom> findByUserId(int userId){
+        return restroomRepository.findByUserId(userId);
     }
 
     public List<Restroom> findByLocation(double latitude, double longitude) {

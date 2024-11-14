@@ -96,7 +96,7 @@ public class ReviewController {
 
         // Ensure that the restroom's userId matches the authenticated user's userId
         if (review.getUserId() != authenticatedUserId) {
-            return new ResponseEntity<>("You are not authorized to create a restroom entry for another user.", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("You are not authorized to update a review entry for another user.", HttpStatus.FORBIDDEN);
         }
 
         Result<Review> result = service.update(review);
@@ -122,7 +122,7 @@ public class ReviewController {
 
         // Ensure that the restroom's userId matches the authenticated user's userId
         if (review != null && review.getUserId() != authenticatedUserId) {
-            return new ResponseEntity<>("You are not authorized to create a restroom entry for another user.", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("You are not authorized to delete a review entry for another user.", HttpStatus.FORBIDDEN);
         }
         if(service.deleteById(reviewId)) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

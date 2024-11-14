@@ -4,6 +4,7 @@ import learn.toilet.domain.RestroomService;
 import learn.toilet.domain.Result;
 import learn.toilet.models.AppUser;
 import learn.toilet.models.Restroom;
+import learn.toilet.models.Review;
 import learn.toilet.security.AppUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -38,6 +40,15 @@ public class RestroomController {
         return restroomService.findByLocation(latitude, longitude);
     }
 
+    @GetMapping("/restrooms/{userId}")
+    public ResponseEntity<List<Restroom>> findByUserId(@PathVariable int userId) {
+        List<Restroom> restrooms = restroomService.findByUserId(userId);
+        if (restrooms == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(restrooms);
+    }
+
     @GetMapping("/{restroomId}")
     public ResponseEntity<Restroom> findById(@PathVariable int restroomId) {
         Restroom restroom = restroomService.findById(restroomId);
@@ -46,6 +57,25 @@ public class RestroomController {
         }
         return ResponseEntity.ok(restroom);
     }
+
+    @GetMapping("/current")
+    public ResponseEntity<List<Restroom>> findByUserId() {
+        // Get the authenticated username from the JWT token
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String username = (String) authentication.getPrincipal();
+        AppUser user = (AppUser) appUserService.loadUserByUsername(username);
+
+        // Get user id from AppUser
+        int authenticatedUserId = user.getAppUserId();
+
+        List<Restroom> restrooms = restroomService.findByUserId(authenticatedUserId);
+        if (restrooms.isEmpty()) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
+        return ResponseEntity.ok(restrooms);
+    }
+
 
     @PostMapping
     public ResponseEntity<Object> add(@RequestBody Restroom restroom) {
@@ -87,7 +117,7 @@ public class RestroomController {
 
         // Ensure that the restroom's userId matches the authenticated user's userId
         if (restroom.getUserId() != authenticatedUserId) {
-            return new ResponseEntity<>("You are not authorized to create a restroom entry for another user.", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("You are not authorized to update a restroom entry for another user.", HttpStatus.FORBIDDEN);
         }
 
         Result<Restroom> result = restroomService.update(restroom);
@@ -113,7 +143,7 @@ public class RestroomController {
 
         // Ensure that the restroom's userId matches the authenticated user's userId
         if (restroom != null && restroom.getUserId() != authenticatedUserId) {
-            return new ResponseEntity<>("You are not authorized to create a restroom entry for another user.", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("You are not authorized to delete a restroom entry for another user.", HttpStatus.FORBIDDEN);
         }
 
         Result<Restroom> result = restroomService.deleteById(restroomId);

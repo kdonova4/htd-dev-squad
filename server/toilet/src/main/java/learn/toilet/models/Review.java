@@ -17,6 +17,7 @@ public class Review {
     private LocalDate used;
     private int restroomId;
     private int userId;
+    private String userName;
 
     public Review() {
 
@@ -89,5 +90,11 @@ public class Review {
     }
 
 
+    public String getUsername() {
+        return userName;
+    }
 
+    public void setUsername(String userName) {
+        this.userName = userName;
+    }
 }
