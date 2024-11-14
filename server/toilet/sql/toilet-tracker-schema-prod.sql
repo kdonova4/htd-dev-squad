@@ -101,9 +101,9 @@ insert into restroom_amenity (amenity_id, restroom_id) values
 (2, 1);
 
 insert into review (review_id, rating, review_text, `timestamp`, date_used, restroom_id, app_user_id) values
-(1, 4, 'This is a review', '2024-11-11 15:30:00', '2020-11-24', 1, 2),
-(2, 5, 'Immaculate and well-maintained.', '2024-11-10 09:15:00', '2024-10-15', 2, 1),
-(3, 2, 'Could use some cleaning.', '2024-11-09 18:20:00', '2024-09-05', 1, 2);
+(1, 4, 'This is a review', '2024-11-14T01:21:07.848+00:00', '2020-11-24', 1, 2),
+(2, 5, 'Immaculate and well-maintained.', '2024-11-12T08:42:07.848+00:00', '2024-10-15', 2, 1),
+(3, 2, 'Could use some cleaning.', '2024-10-10T06:12:07.848+00:00', '2024-09-05', 1, 2);
 
 insert into app_role (`name`) values
     ('USER'),
