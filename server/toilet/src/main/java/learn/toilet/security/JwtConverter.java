@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Component
 public class JwtConverter {
     private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final String ISSUER = "field-agent";
+    private final String ISSUER = "toilet-tracker";
     private final int EXPIRATION_MINUTES = 15;
     private final int EXPIRATION_MILLIS = EXPIRATION_MINUTES * 60 * 1000;
 
