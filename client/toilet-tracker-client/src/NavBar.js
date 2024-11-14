@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 
 function BasicExample() {
-  const { token, logout } = useAuth();
+  const { token, logout, role } = useAuth(); // Get role and token from context
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary" style={{ height: `60px` }}>
@@ -29,12 +29,19 @@ function BasicExample() {
             <Nav.Link as={Link} to={"/about"}>
               About
             </Nav.Link>
+
+            {role === "ROLE_ADMIN" && (
+              <Nav.Link as={Link} to={"/amenity/new"}>
+                Add Amenity
+              </Nav.Link>
+            )}
+
             {token ? (
               <>
                 <Nav.Link as={Link} to={"/profile"}>
                   Profile
                 </Nav.Link>
-                <Nav.Link onClick={logout}>Logout</Nav.Link>{" "}
+                <Nav.Link onClick={logout}>Logout</Nav.Link>
               </>
             ) : (
               <>
