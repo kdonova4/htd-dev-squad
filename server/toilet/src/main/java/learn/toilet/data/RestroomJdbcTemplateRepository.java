@@ -28,7 +28,7 @@ public class RestroomJdbcTemplateRepository implements RestroomRepository {
     @Override
     public List<Restroom> findAll() {
         // limit until we develop a paging solution
-        final String sql = "select restroom_id, name, address, latitude, longitude, directions, description from restroom limit 1000;";
+        final String sql = "select restroom_id, `name`, address, latitude, longitude, directions, `description`, app_user_id from restroom limit 1000;";
         return jdbcTemplate.query(sql, new RestroomMapper());
     }
 
@@ -36,7 +36,7 @@ public class RestroomJdbcTemplateRepository implements RestroomRepository {
     @Transactional
     public Restroom findById(int restroomId) {
 
-        final String sql = "select restroom_id, `name`, address, latitude, longitude, directions, `description` "
+        final String sql = "select restroom_id, `name`, address, latitude, longitude, directions, `description`, app_user_id "
                 + "from restroom "
                 + "where restroom_id = ?;";
 
@@ -54,7 +54,7 @@ public class RestroomJdbcTemplateRepository implements RestroomRepository {
     @Override
     public List<Restroom> findByUserId(int userId)
     {
-        final String sql = "select restroom_id, `name`, address, latitude, longitude, directions, `description` "
+        final String sql = "select restroom_id, `name`, address, latitude, longitude, directions, `description`, app_user_id "
                 + "from restroom "
                 + "where app_user_id = ?;";
 
