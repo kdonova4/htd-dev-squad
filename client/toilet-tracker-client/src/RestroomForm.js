@@ -117,10 +117,10 @@ const RestroomForm = () => {
     const token = localStorage.getItem("token");
     console.log("TOKEN", token);
     console.log(restroom);
-
+    let decodedToken;
     if (token) {
-      const decodedToken = jwtDecode(token);
-      console.log("decodedtoken", decodedToken);
+      decodedToken = jwtDecode(token);
+      console.log("decodedtoken", decodedToken.appUserId);
       //   userId = decodedToken.userId || decodedToken.sub; // adjust based on your JWT structure
       // access sub property to find user by username as sub property has username which was used to create jwt token
     }
@@ -135,7 +135,7 @@ const RestroomForm = () => {
           ...restroom,
           latitude: parseFloat(restroom.latitude),
           longitude: parseFloat(restroom.longitude),
-          userId: parseInt(restroom.userId),
+          userId: parseInt(decodedToken.appUserId),
         }),
       };
       const response = fetch(url, init);
@@ -148,7 +148,7 @@ const RestroomForm = () => {
           address: "",
           directions: "",
           description: "",
-          userId: "",
+          userId: decodedToken.appUserId,
         });
       }
     } catch (err) {
