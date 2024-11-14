@@ -1,6 +1,7 @@
 package learn.toilet.data;
 
 
+import learn.toilet.data.mappers.RestroomMapper;
 import org.springframework.stereotype.Repository;
 
 
@@ -26,7 +27,9 @@ public class AmenityJdbcTemplateRepository implements AmenityRepository {
 
     @Override
     public List<Amenity> findAll() {
-        return List.of();
+        final String sql = "select amenity_id, amenity_name "
+                + "from amenity;";
+        return jdbcTemplate.query(sql, new AmenityMapper());
     }
 
     @Override
