@@ -1,23 +1,26 @@
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate, useParams, Link } from "react-router-dom";
+
 
 function ReviewList({ reviewType, id }) {
     const [reviews, setReviews] = useState([]);
     const [usernames, setUsernames] = useState({});
+    const { restroomId } = useParams();
+    
     const url = `http://localhost:8080/api/review`;
-
     const token = localStorage.getItem("token");
     let decodedToken;
     if (token) {
         decodedToken = jwtDecode(token);
     }
 
-    const userId = decodedToken?.appUserId;
+    
 
     useEffect(() => {
         let fetchUrl;
         if (reviewType === 'restroom') {
-            fetchUrl = `${url}/restroom/${id}`;
+            fetchUrl = `${url}/restroom/reviews/${id}`;
         } else if (reviewType === 'user') {
             fetchUrl = `${url}/current`;
         }
@@ -70,7 +73,7 @@ function ReviewList({ reviewType, id }) {
                     <div key={review.reviewId} className="media-body pb-3 mb-0 small 1h-125 border-bottom border-gray">
                         <h5>
                             <span className="review-rating">
-                                {usernames[review.userId] || "Unknown User"} {review.rating}
+                                {usernames[review.userId] || "Unknown User"}  -  {review.rating}
                             </span>
                         </h5>
                         <p>Date Used: {review.used}</p>

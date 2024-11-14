@@ -34,6 +34,8 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository{
         return jdbcTemplate.query(sql, new ReviewMapper(), reviewId).stream().findFirst().orElse(null);
     }
 
+
+
     @Override
     public List<Review> findByUserId(int userId)
     {
@@ -54,14 +56,19 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository{
         return jdbcTemplate.query(sql, new ReviewMapper(), restroomId);
     }
 
-    @Transactional
+
     @Override
     public Review add(Review review) {
         final String sql = "insert into review (rating, review_text, timestamp, date_used, restroom_id, app_user_id)"
                 +" values (?,?,?,?,?,?);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
-
+//        System.out.println("Rating: " + review.getRating());
+//        System.out.println("Review Text: " + review.getReviewText());
+//        System.out.println("Timestamp: " + review.getTimeStamp());
+//        System.out.println("Used Date: " + review.getUsed());
+//        System.out.println("Restroom ID: " + review.getRestroomId());
+//        System.out.println("User ID: " + review.getUserId());
         int rowsAffected = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setInt(1, review.getRating());

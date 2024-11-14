@@ -58,6 +58,12 @@ public class ReviewService {
     }
 
     public Result<Review> update(Review review) {
+
+        // Generate a timestamp
+        if (review.getTimeStamp() == null) {
+            review.setTimeStamp(Timestamp.valueOf(ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime()));
+        }
+
         Result<Review> result = validate(review);
         if(!result.isSuccess()) {
             return result;

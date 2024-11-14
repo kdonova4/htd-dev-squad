@@ -28,6 +28,11 @@ public class ReviewController {
         this.service = service;
     }
 
+    @GetMapping("/{reviewId}")
+    public Review findById(@PathVariable int reviewId){
+        return service.findById(reviewId);
+    }
+
     @GetMapping("/current")
     public ResponseEntity<List<Review>> findByUserId() {
         // Get the authenticated username from the JWT token
@@ -46,7 +51,7 @@ public class ReviewController {
         return ResponseEntity.ok(reviews);
     }
 
-    @GetMapping("/restroom/{restroomId}")
+    @GetMapping("/restroom/reviews/{restroomId}")
     public List<Review> findByRestroomId(@PathVariable int restroomId) {
         return service.findByRestroomId(restroomId);
     }
@@ -74,12 +79,12 @@ public class ReviewController {
         return ErrorResponse.build(result);
     }
 
-    @PutMapping("/{reviewId}")
+    @PutMapping("/{restroomId}/{reviewId}")
     public ResponseEntity<Object> update(@PathVariable int reviewId, @RequestBody Review review) {
         if(reviewId != review.getReviewId()) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
-
+        System.out.println(review.getUserId());
         // Get the authenticated username from the JWT token
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
