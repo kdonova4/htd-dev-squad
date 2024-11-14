@@ -93,7 +93,7 @@ function ReviewForm() {
             })
             .then(data => {
                 if (data.reviewId) {
-                    navigate('/');
+                    navigate(-1);
                 } else {
                     setErrors(data);
                 }
@@ -129,7 +129,7 @@ function ReviewForm() {
             })
             .then(data => {
                 if (!data) {
-                    navigate('/');
+                    navigate(-1);
                     setSuccess(true);
                 } else {
                     setErrors(data);
@@ -179,7 +179,7 @@ function ReviewForm() {
                             <Button variant="primary" type="submit" className="mr-2">
                                 Submit
                             </Button>
-                            <Link type="button" className="btn btn-outline-danger" to={'/'}>Cancel</Link>
+                            <Link type="button" className="btn btn-outline-danger" to={-1}>Cancel</Link>
                         </Form.Group>
                     </Form>
                 </Col>

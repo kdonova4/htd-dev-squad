@@ -41,10 +41,10 @@ function ReviewList({ reviewType, id }) {
             .then(data => {
                 setReviews(data);
 
-                // Step 2: Extract userIds from the fetched reviews
+                
                 const userIds = [...new Set(data.map(review => review.userId))];
 
-                // Step 3: Fetch usernames in bulk for each userId
+                
                 const fetchUsernames = async () => {
                     const fetchedUsernames = {};
                     for (let userId of userIds) {
@@ -54,13 +54,47 @@ function ReviewList({ reviewType, id }) {
                             fetchedUsernames[userId] = userData.username;
                         }
                     }
-                    setUsernames(fetchedUsernames); // Store the fetched usernames
+                    setUsernames(fetchedUsernames); 
                 };
 
                 fetchUsernames();
             })
             .catch(console.log);
     }, [id, reviewType, token]);
+
+
+    //handle delete
+    const handleDeleteReview = (reviewId) => {
+        const review = reviews.find(r => r.reviewId === reviewId);
+        if(window.confirm(`Delete Review?`)) {
+            const token = localStorage.getItem("token"); 
+            const headers = {
+                'Authorization': `Bearer ${token}`, 
+                'Content-Type': 'application/json', 
+            };
+    
+            const init = {
+                method: 'DELETE',
+                headers: headers, 
+            };
+    
+            fetch(`${url}/${reviewId}`, init)
+            .then(response => {
+                if(response.status === 204){
+                    
+                    const newReviews = reviews.filter(r => r.reviewId !== reviewId);
+                    
+                    setReviews(newReviews);
+                } else {
+                    return Promise.reject(`Unexpected Status Code ${response.status}`);
+                }
+            })
+            .catch(console.log);
+        }
+    };
+
+
+       
 
     return (
         <section className="container">
@@ -70,7 +104,7 @@ function ReviewList({ reviewType, id }) {
                 <p>No reviews available.</p>
             ) : (
                 reviews.map(review => (
-                    <div key={review.reviewId} className="media-body pb-3 mb-0 small 1h-125 border-bottom border-gray">
+                    <div key={review.reviewId} className="media-body pb-3 mb-0 small 1h-125 border-bottom border-gray" style={{ position: 'relative' }}>
                         <h5>
                             <span className="review-rating">
                                 {usernames[review.userId] || "Unknown User"}  -  {review.rating}
@@ -81,6 +115,14 @@ function ReviewList({ reviewType, id }) {
                             <strong className="d-block text-gray-dark">{review.reviewText}</strong>
                         </p>
                         <footer>{new Date(review.timeStamp).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })}</footer>
+
+                        
+                        {review.userId === decodedToken.appUserId && (
+                            <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
+                                <Link className="btn btn-primary" to={`/reviews/${review.restroomId}/${review.reviewId}`} >Update</Link>
+                                <button className="btn btn-danger" onClick={() => handleDeleteReview(review.reviewId)}>Delete</button>
+                                </div>
+                        )}
                     </div>
                 ))
             )}
