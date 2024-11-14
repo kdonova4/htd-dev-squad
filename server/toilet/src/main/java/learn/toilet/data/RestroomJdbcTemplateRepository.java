@@ -52,6 +52,16 @@ public class RestroomJdbcTemplateRepository implements RestroomRepository {
     }
 
     @Override
+    public List<Restroom> findByUserId(int userId)
+    {
+        final String sql = "select restroom_id, `name`, address, latitude, longitude, directions, `description` "
+                + "from restroom "
+                + "where app_user_id = ?;";
+
+        return jdbcTemplate.query(sql, new RestroomMapper(), userId);
+    }
+
+    @Override
     public Restroom add(Restroom restroom) {
 
         final String sql = "insert into restroom (name, address, latitude, longitude, directions, description, app_user_id) values (?,?,?,?,?,?,?);";
