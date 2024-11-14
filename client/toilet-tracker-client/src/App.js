@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { BrowserRouter as Router } from "react-router-dom";
+import About from "./About";
 import Login from "./Login";
 import Register from "./Register";
 import RestroomForm from "./RestroomForm";
@@ -18,10 +19,11 @@ function App() {
         <NavBar />
         <Container>
           <Routes>
+            <Route path="/about" element={<About />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={<HomePage/>}/>
-            <Route path="/review/new" element={<ReviewForm/>}/>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/review/new" element={<ReviewForm />} />
             <Route path="/restrooms/new" element={<RestroomForm />} />
             <Route path="/restrooms" element={<RestroomList />} />
             <Route
@@ -30,7 +32,6 @@ function App() {
             />
           </Routes>
         </Container>
-
       </Router>
     </>
   );
