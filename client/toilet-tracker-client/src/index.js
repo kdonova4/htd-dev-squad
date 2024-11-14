@@ -1,12 +1,11 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
+import ReactDOM from 'react-dom';
+import { RestroomProvider } from './RestroomContext';  // Adjust the path as needed
 import App from './App';
 
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
+ReactDOM.render(
+  <RestroomProvider>
     <App />
-  </React.StrictMode>
+  </RestroomProvider>,
+  document.getElementById('root')
 );
