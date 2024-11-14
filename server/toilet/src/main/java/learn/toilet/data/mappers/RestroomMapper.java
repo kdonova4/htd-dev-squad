@@ -18,6 +18,7 @@ public class RestroomMapper implements RowMapper<Restroom> {
         restroom.setDirections(resultSet.getString("directions"));
         restroom.setLatitude(resultSet.getDouble("latitude"));
         restroom.setLongitude(resultSet.getDouble("longitude"));
+        restroom.setUserId(resultSet.getInt("app_user_id"));
         return restroom;
     }
 }
