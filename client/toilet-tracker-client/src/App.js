@@ -6,6 +6,7 @@ import Register from "./Register";
 import RestroomForm from "./RestroomForm";
 import NavBar from "./NavBar";
 import AmenityForm from "./AmenityForm";
+import AmenityList from "./AmenityList";
 import ReviewList from "./ReviewList";
 import ReviewForm from "./ReviewForm";
 import { Container } from "react-bootstrap";
@@ -48,6 +49,7 @@ function App() {
               path="/restrooms/edit/:restroomId"
               element={<RestroomForm />}
             />
+            <Route path="/amenities" element={<AmenityList />} />
             <Route
               path="/amenity/new"
               element={

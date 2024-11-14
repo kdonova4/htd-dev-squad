@@ -3,10 +3,13 @@ import { Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
+import { useNavigate } from "react-router-dom";
+
 function AmenityForm() {
   const [amenityName, setAmenityName] = useState("");
   const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState("");
+  const navigate = useNavigate();
 
   const amenitiesUrl = "http://localhost:8080/api/amenity/admin";
 
@@ -37,6 +40,7 @@ function AmenityForm() {
       if (response.status === 201) {
         setSuccess(true);
         setAmenityName("");
+        navigate("/amenities");
       }
     } catch (err) {
       setErrors("Failed to add amenity. Please try again.");
