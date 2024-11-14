@@ -10,6 +10,7 @@ import ReviewForm from "./ReviewForm";
 import { Container } from "react-bootstrap";
 import HomePage from "./Home";
 import RestroomList from "./RestroomList";
+import RestroomReviews from "./RestroomReviews";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="/current" element={<ReviewPage/>} />
             <Route path="/restrooms/new" element={<RestroomForm />} />
             <Route path="/restrooms" element={<RestroomList />} />
+            <Route path="/restroom" element={<RestroomReviews />} />
             <Route
               path="/restrooms/edit/:restroomId"
               element={<RestroomForm />}
