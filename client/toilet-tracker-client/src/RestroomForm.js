@@ -258,17 +258,22 @@ const RestroomForm = () => {
             </Form.Group>
             <Form.Group controlId="amenities">
               <Form.Label>Amenities</Form.Label>
-              {amenities.map((amenity) => (
-                <Form.Check
-                  key={amenity.id}
-                  type="checkbox"
-                  label={amenity.name}
-                  value={amenity.id}
-                  checked={restroom.amenities.includes(amenity.id)}
-                  onChange={handleAmenityChange}
-                />
-              ))}
+              {amenities && amenities.length > 0 ? (
+                amenities.map((amenity) => (
+                  <Form.Check
+                    key={amenity.id}
+                    type="checkbox"
+                    label={amenity.amenityName}
+                    value={amenity.amenityId}
+                    checked={restroom.amenities.includes(amenity.amenityId)}
+                    onChange={handleAmenityChange}
+                  />
+                ))
+              ) : (
+                <p>Loading amenities...</p>
+              )}
             </Form.Group>
+
             <Form.Group controlId="submit" className="mt-3">
               <Button variant="primary" type="submit" className="mr-2">
                 Submit
