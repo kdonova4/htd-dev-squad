@@ -117,7 +117,7 @@ insert into app_user_role
 
 
 insert into review (review_id, rating, review_text, `timestamp`, date_used, restroom_id, app_user_id) values
-(4, 2, 'Could use some cleaning.', '2024-10-10T06:12:07.848+00:00', '2024-09-05', 1, 3);
+(4, 2, 'Could use some cleaning.', '2024-10-10T06:12:07.848+00:00', '2024-09-05', 1, 2);
 
 
 

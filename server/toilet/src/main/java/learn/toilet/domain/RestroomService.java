@@ -5,6 +5,7 @@ import learn.toilet.data.RestroomAmenityRepository;
 import learn.toilet.data.RestroomRepository;
 import learn.toilet.models.Restroom;
 import learn.toilet.models.RestroomAmenity;
+import learn.toilet.models.Review;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
