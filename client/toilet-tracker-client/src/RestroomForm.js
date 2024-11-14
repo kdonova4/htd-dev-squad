@@ -152,7 +152,9 @@ const RestroomForm = () => {
         });
       }
     } catch (err) {
-      setErrors("Failed to add restroom. Please try again.");
+      setErrors(
+        "Failed to add restroom. You may need to log in and / or input required fields.  Please try again."
+      );
     }
   };
 

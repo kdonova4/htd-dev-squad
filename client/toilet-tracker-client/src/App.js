@@ -16,6 +16,7 @@ import RestroomList from "./RestroomList";
 import { jwtDecode } from "jwt-decode";
 import RestroomReviews from "./RestroomReviews";
 import UserProfile from "./UserProfile";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   // Get the token from localStorage (or wherever it is stored)
@@ -43,7 +44,14 @@ function App() {
           <Routes>
             <Route path="/about" element={<About />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
+            <Route
+              path="/login"
+              element={
+                <ProtectedRoute>
+                  <Login />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/" element={<HomePage />} />
             <Route path="/reviews/:restroomId/new" element={<ReviewForm />} />
             <Route
