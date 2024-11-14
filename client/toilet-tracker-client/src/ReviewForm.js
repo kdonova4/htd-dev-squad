@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
-
+import { Form, Button, Container, Alert, Row, Col } from 'react-bootstrap';
 
 const REVIEW_DEFAULT = {
 
@@ -17,8 +17,8 @@ function ReviewForm() {
     // STATE
 
     const [review, setReview] = useState(REVIEW_DEFAULT);
-    const [errors, setErrors] = useState([]);
-    
+    const [errors, setErrors] = useState('');
+    const [success, setSuccess] = useState(false);
     const url = 'http://localhost:8080/api/review'
     const navigate = useNavigate();
     const { reviewId } = useParams();
@@ -45,6 +45,7 @@ function ReviewForm() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        setSuccess(false);
         if(reviewId) {
             updateReview();
         }else {
@@ -63,10 +64,14 @@ function ReviewForm() {
 
     // adding review
     const addReview = () => {
+
+        const token = localStorage.getItem('token');
+
         const init = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify(review)
         }
@@ -111,7 +116,7 @@ function ReviewForm() {
         .then(data =>{
             if(!data) {
                 navigate('/')
-                
+                setSuccess(true);
             }else {
                 // get error messages and display them
                 setErrors(data);
@@ -122,7 +127,78 @@ function ReviewForm() {
 
 
     return(<>
-            <section>
+            <Container fluid>
+            <Row>
+                <Col md={6} className="p-4">
+                    <h2>{reviewId > 0 ? 'Update Review' : 'Add Review'}</h2>
+                    {success && <Alert variant="success">Review added successfully!</Alert>}
+                    {errors && <Alert variant="danger">{errors}</Alert>}
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group controlId="name">
+                            <Form.Label>Rating</Form.Label>
+                            <Form.Control
+                                type="number"
+                                name="rating"
+                                value={review.rating}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="directions">
+                            <Form.Label>Review Text</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                name="reviewText"
+                                value={review.reviewText}
+                                onChange={handleChange}
+                                rows={3}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="description">
+                            <Form.Label>Date Used</Form.Label>
+                            <Form.Control
+                                type="date"
+                                name="used"
+                                value={review.used}
+                                onChange={handleChange}
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="submit" className="mt-3">
+                            <Button variant="primary" type="submit" className="mr-2">
+                                Submit
+                            </Button>
+                            <Link type="button" className="btn btn-outline-danger" to={'/'}>Cancel</Link>
+                        </Form.Group>
+                    </Form>
+                </Col>
+            </Row>
+        </Container>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+    </>)
+}
+
+export default ReviewForm;
+
+
+
+{/* <section>
                 <h2 className="mb-4">{reviewId > 0 ? 'Update Review' : 'Add Review'}</h2>
                     {errors.length > 0 && (
                         <div className="alert alert-danger">
@@ -170,11 +246,7 @@ function ReviewForm() {
                         </fieldset>
                         <fieldset className="form-group">
                             <button type="submit" className="btn btn-outline-success mr-4">{reviewId > 0 ? 'Update Review' : 'Add Review'}</button>
-                            <Link type="button" className="btn btn-outline-danger mr-4" to={'/reviews'}>Cancel</Link>
+                            <Link type="button" className="btn btn-outline-danger mr-4" to={'/'}>Cancel</Link>
                         </fieldset>
                     </form>
-            </section>
-    </>)
-}
-
-export default ReviewForm;
+            </section> */}

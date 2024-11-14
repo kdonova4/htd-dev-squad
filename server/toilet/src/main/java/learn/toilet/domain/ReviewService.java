@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
@@ -44,8 +46,9 @@ public class ReviewService {
 
         // Generate a timestamp
         if (review.getTimeStamp() == null) {
-            review.setTimeStamp(Timestamp.valueOf(LocalDateTime.now()));
+            review.setTimeStamp(Timestamp.valueOf(ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime()));
         }
+
 
         review = repository.add(review);
         result.setPayload(review);

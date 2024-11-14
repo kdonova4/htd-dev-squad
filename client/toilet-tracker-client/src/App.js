@@ -4,7 +4,7 @@ import Login from "./Login";
 import Register from "./Register";
 import RestroomForm from "./RestroomForm";
 import NavBar from "./NavBar";
-
+import ReviewPage from "./ReviewPage";
 import ReviewList from "./ReviewList";
 import ReviewForm from "./ReviewForm";
 import { Container } from "react-bootstrap";
@@ -22,6 +22,9 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/" element={<HomePage/>}/>
             <Route path="/review/new" element={<ReviewForm/>}/>
+            <Route path="/reviews/edit/:reviewId" element={<ReviewForm/>}/>
+            <Route path="/reviews/:type/:id" element={<ReviewPage/>} />
+            <Route path="/user/reviews" element={<ReviewPage/>} />
             <Route path="/restrooms/new" element={<RestroomForm />} />
             <Route path="/restrooms" element={<RestroomList />} />
             <Route

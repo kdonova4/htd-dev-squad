@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 
 const REVIEW_DATA = [
 
@@ -39,34 +39,51 @@ const REVIEW_DATA = [
 
 ]
 
-function ReviewList() {
+function ReviewList({ reviewType }) {
 
     const[reviews, setReviews] = useState([]);
-    const url = 'http://localhost:8080/api/review'
+    const { id } = useParams(); // to get the dynamic part of the URL, like restroomId or userId
+
+    const url = `http://localhost:8080/api/review`;
 
     useEffect(() => {
-
-       fetch(`${url}/1`) // restroom Id
-        .then(response => {
-            if(response.status === 200) {
-                return response.json();
-            }else {
-                return Promise.reject(`Unexpected Status Code: ${response.status}`);
-            }
-        })
-        .then(data => {
-            setReviews(data)
-            console.log(data)
-        })
-        .catch(console.log)
-    }, [])
+        let fetchUrl;
+        if (reviewType === 'restroom') {
+            fetchUrl = `${url}/${id}`;  
+        } else if (reviewType === 'user') {
+            fetchUrl = `${url}/current`; 
+        }
+        console.log(fetchUrl);
+        // get token 
+        const token = localStorage.getItem('token');
+        
+        
+        const headers = {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',  
+        };
+    
+        
+        fetch(fetchUrl, { headers })
+            .then(response => {
+                if (response.status === 200) {
+                    return response.json();
+                } else {
+                    return Promise.reject(`Unexpected Status Code: ${response.status}`);
+                }
+            })
+            .then(data => {
+                setReviews(data);
+            })
+            .catch(console.log);
+    }, [id, reviewType]);
 
 
     //Methods
 
     //delete
     const handleDeleteReview = (reviewId) => {
-        const review = review.find(r => r.reviewId === reviewId);
+        const review = reviews.find(r => r.reviewId === reviewId);
         if(window.confirm(`Delete Review?`)) {
             const init = {
                 method: 'DELETE'
@@ -97,10 +114,10 @@ function ReviewList() {
                         <p>
                             <strong className="d-block text-gray-dark">{review.reviewText}</strong>
                         </p>
-                        <footer>{review.timeStamp}</footer>
+                        <footer>{new Date(review.timeStamp).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })}</footer>
+
                     </div>
                     ))}
-
                 </section>
     </>)
 }
