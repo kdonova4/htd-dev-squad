@@ -4,11 +4,13 @@ import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import ReviewPage from "./ReviewPage";
 
+
 const API_BASE_URL = 'http://localhost:8080/api';
 
 function UserProfile() {
     const [restrooms, setRestrooms] = useState([]);
     const [reviews, setReviews] = useState([]);
+
     const token = localStorage.getItem("token");
     const decodedToken = token ? jwtDecode(token) : null;
 
@@ -58,6 +60,7 @@ function UserProfile() {
 
                         const newRestrooms = restrooms.filter(r => r.restroomId !== restroomId);
 
+
                         setRestrooms(newRestrooms);
                     } else {
                         return Promise.reject(`Unexpected Status Code ${response.status}`);
@@ -68,6 +71,7 @@ function UserProfile() {
     };
 
     return (
+
         <Container fluid>
             <Row>
                 <Col md={6} className="p-4">
