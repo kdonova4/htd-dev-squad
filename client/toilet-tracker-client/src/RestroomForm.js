@@ -163,17 +163,19 @@ const RestroomForm = () => {
         })
         .catch(console.log);
     } catch (err) {
-      setErrors(
-        ["Failed to add restroom. You may need to log in and / or input required fields.  Please try again."]
-      );
+      setErrors([
+        "Failed to add restroom. You may need to log in and / or input required fields.  Please try again.",
+      ]);
     }
   };
 
   const updateRestroom = () => {
     restroom.restroomId = restroomId;
+    const token = localStorage.getItem("token");
     const init = {
       method: "PUT",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -187,7 +189,7 @@ const RestroomForm = () => {
       .then((response) => {
         if (response.status === 204) {
           return null;
-          navigate(`/restrooms`)
+          navigate(`/restrooms`);
         } else if (response.status === 400) {
           return response.json();
         } else {
@@ -240,7 +242,7 @@ const RestroomForm = () => {
             <div className="alert alert-danger">
               <p>The following Errors were found:</p>
               <ul>
-                {errors.map(error => (
+                {errors.map((error) => (
                   <li key={error}>{error}</li>
                 ))}
               </ul>
