@@ -117,14 +117,9 @@ const RestroomForm = () => {
 
   const addRestroom = async () => {
     const token = localStorage.getItem("token");
-    console.log("TOKEN", token);
-    console.log(restroom);
     let decodedToken;
     if (token) {
       decodedToken = jwtDecode(token);
-      console.log("decodedtoken", decodedToken.appUserId);
-      //   userId = decodedToken.userId || decodedToken.sub; // adjust based on your JWT structure
-      // access sub property to find user by username as sub property has username which was used to create jwt token
     }
     try {
       const init = {
@@ -189,7 +184,9 @@ const RestroomForm = () => {
       .then((response) => {
         if (response.status === 204) {
           return null;
+
           navigate(`/restrooms`);
+
         } else if (response.status === 400) {
           return response.json();
         } else {
