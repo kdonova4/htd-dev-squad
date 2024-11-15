@@ -16,7 +16,7 @@ import java.time.ZoneId;
 import java.util.List;
 
 @Repository
-public class ReviewJdbcTemplateRepository implements ReviewRepository{
+public class ReviewJdbcTemplateRepository implements ReviewRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -35,20 +35,29 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository{
     }
 
 
-
     @Override
-    public List<Review> findByUserId(int userId)
-    {
-        final String sql = "select review_id, rating, review_text, timestamp, date_used, restroom_id, app_user_id "
-                + "from review "
-                + "where app_user_id = ?;";
+    public List<Review> findByUserId(int userId) {
+        final String sql = "select review_id, rating, review_text, timestamp, date_used, r.restroom_id, r.app_user_id, rr.name "
+                + "from review r "
+                + "inner join restroom rr on rr.restroom_id = r.restroom_id "
+                + "where r.app_user_id = ?;";
 
-        return jdbcTemplate.query(sql, new ReviewMapper(), userId);
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Review review = new Review();
+            review.setReviewId(rs.getInt("review_id"));
+            review.setRating(rs.getInt("rating"));
+            review.setReviewText(rs.getString("review_text"));
+            review.setTimeStamp(rs.getTimestamp("timestamp"));
+            review.setUsed(rs.getDate("date_used").toLocalDate());
+            review.setRestroomId(rs.getInt("restroom_id"));
+            review.setUserId(rs.getInt("app_user_id"));
+            review.setLocationName(rs.getString("name"));
+            return review;
+        }, userId);
     }
 
     @Override
-    public List<Review> findByRestroomId(int restroomId)
-    {
+    public List<Review> findByRestroomId(int restroomId) {
         final String sql = "select review_id, rating, review_text, timestamp, date_used, restroom_id, app_user_id "
                 + "from review "
                 + "where restroom_id = ?;";
@@ -60,7 +69,7 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository{
     @Override
     public Review add(Review review) {
         final String sql = "insert into review (rating, review_text, timestamp, date_used, restroom_id, app_user_id)"
-                +" values (?,?,?,?,?,?);";
+                + " values (?,?,?,?,?,?);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 //        System.out.println("Rating: " + review.getRating());
@@ -80,7 +89,7 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository{
             return ps;
         }, keyHolder);
 
-        if(rowsAffected <= 0) {
+        if (rowsAffected <= 0) {
             return null;
         }
 
@@ -120,9 +129,6 @@ public class ReviewJdbcTemplateRepository implements ReviewRepository{
 
         return jdbcTemplate.update(sql, reviewId) > 0;
     }
-
-
-
 
 
 }

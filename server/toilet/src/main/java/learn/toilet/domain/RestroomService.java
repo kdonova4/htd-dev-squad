@@ -178,6 +178,15 @@ public class RestroomService {
             result.addMessage("amenity cannot be null", ResultType.INVALID);
         }
 
+        // Check if the amenity already exists for the restroom
+        List<RestroomAmenity> existingAmenities = restroomAmenityRepository.findByRestroomId(restroomAmenity.getRestroomId());
+        for (RestroomAmenity existingAmenity : existingAmenities) {
+            if (existingAmenity.getAmenity().getAmenityId() == restroomAmenity.getAmenity().getAmenityId()) {
+                result.addMessage("This amenity already exists for the restroom", ResultType.INVALID);
+                return result;
+            }
+        }
+
         return result;
     }
 }
