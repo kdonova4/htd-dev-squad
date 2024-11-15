@@ -1,6 +1,7 @@
 package learn.toilet.data;
 
 import learn.toilet.models.Restroom;
+import learn.toilet.models.Review;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
