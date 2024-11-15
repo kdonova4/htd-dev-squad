@@ -74,11 +74,11 @@ function UserProfile() {
 
         <Container fluid>
             <Row>
-                <Col md={6} className="p-4">
+                <Col md={12} className="p-2">
                     <h2>{username}'s Profile</h2>
                     <ReviewPage reviews={reviews} />
                 </Col>
-                <Col md={6} className="p-4">
+                <Col md={12} className="p-4">
                     <div className="text-center mb-4">
                         <h2>Restrooms</h2>
                     </div>
