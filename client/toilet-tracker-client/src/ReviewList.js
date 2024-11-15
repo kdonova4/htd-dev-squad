@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate, useParams, Link } from "react-router-dom";
 
-function ReviewList({ reviews }) {
+function ReviewList({ reviews, type }) {
     const [reviewState, setReviews] = useState(reviews);
 
     useEffect(() => {
@@ -78,7 +78,7 @@ function ReviewList({ reviews }) {
                                         <div className="rating-badge" style={{ backgroundColor: getRatingColor(review.rating) }}>
                                             <span className="rating-number">{review.rating}</span>
                                         </div>
-                                        
+
 
                                         <div className="d-flex flex-start">
                                             <img
@@ -89,16 +89,16 @@ function ReviewList({ reviews }) {
                                                 height="60"
                                             />
                                             <div>
-                                                <h4 className="fw-bold mb-">{review.username || "unknown User"}</h4>
+                                                <h4 className="fw-bold mb-">{type === "user" ? review.locationName : review.username}</h4>
                                                 <div className="d-flex align-items-center mb-3">
                                                     <p className="mb-0" style={{fontSize: '0.8rem'}}>Date Last Used: {review.used}</p>
-                                                    
+
                                                 </div>
                                                 <div style={{ position: 'absolute', top: '32px', right: '80px' }}><footer style={{fontSize: '0.8rem'}}>{new Date(review.timeStamp).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })}</footer></div>
                                                 <p className="mb-3" style={{fontSize: '1.8rem'}}>{review.reviewText}</p>
                                                 {decodedToken && review.userId === decodedToken.appUserId && (
                                                     <div style={{ position: 'absolute', bottom: '10px', right: '10px' }}>
-                                                        <Link className="btn btn-outline-success"  to={`/reviews/${review.restroomId}/${review.reviewId}`} style={{ marginRight: '10px' }}>Update</Link>
+                                                        <Link className="btn btn-outline-success mr-2"  to={`/reviews/${review.restroomId}/${review.reviewId}`}>Update</Link>
                                                         <button className="btn btn-outline-danger" onClick={() => handleDeleteReview(review.reviewId)}>Delete</button>
                                                     </div>
                                                 )}

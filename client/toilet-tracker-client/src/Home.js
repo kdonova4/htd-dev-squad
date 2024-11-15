@@ -11,11 +11,12 @@ const HomePage = () => {
     };
 
     return (
-        <div className="d-flex align-items-center justify-content-center" style={{ height: `calc(100vh - 60px)` }}>
+        <div className="d-flex align-items-start justify-content-center" style={{ height: `calc(100vh - 60px)` }}>
             <Row className="justify-content-center w-100">
                 <Col>
                     <div className="text-center">
-                        <h1 className="m-md-4">Toilet Tracker</h1>
+                        <img src="/toilet_tracker-removebg-preview.png" alt="Logo" style={{ maxWidth: '500px', width:'100%', marginBottom: '20px' }} />
+                        <h1 className='mb-3'>Toilet Tracker</h1>
                         <LocationSearchForm onLocationChange={handleLocationChange} />
                     </div>
                 </Col>

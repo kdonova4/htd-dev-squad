@@ -1,4 +1,4 @@
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, ListGroup } from "react-bootstrap";
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
@@ -6,6 +6,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import ReviewPage from "./ReviewPage";
 import './index.css';
+import { useAuth } from "./context/AuthContext";
 
 const RESTROOM_DEFAULT = {
     name: "",
@@ -30,6 +31,7 @@ function RestroomReviews() {
     const { restroomId } = useParams();
     const [restroom, setRestroom] = useState(RESTROOM_DEFAULT);
     const [map, setMap] = useState(null); // Track the map instance
+    const { token } = useAuth(); // Get role and token from context
 
     useEffect(() => {
         const fetchRestroom = async () => {
@@ -59,46 +61,43 @@ function RestroomReviews() {
         <Container fluid>
             <Row>
                 <Col md={6} className="p-4">
-                <div class="bathroom-details mt-5">
-                <h3 class="bathroom-name">Bathroom Details</h3>
-                    <div class="detail">
-                        <span class="detail-label">Name: </span>
-                        <span class="detail-value">{restroom.name}</span>
+                    <div class="bathroom-details mt-5">
+                        <h3 class="bathroom-name">Bathroom Details</h3>
+                        <div class="detail">
+                            <span class="detail-label">Name: </span>
+                            <span class="detail-value">{restroom.name}</span>
+                        </div>
+                        <div class="detail">
+                            <span class="detail-label">Address: </span>
+                            <span class="detail-value">{restroom.address}</span>
+                        </div>
+                        <div class="detail">
+                            <span class="detail-label">Description: </span>
+                            <span class="detail-value">{restroom.description}</span>
+                        </div>
+                        <div class="detail">
+                            <span class="detail-label">Directions: </span>
+                            <span class="detail-value">{restroom.directions}</span>
+                        </div>
                     </div>
-                    <div class="detail">
-                        <span class="detail-label">Address: </span>
-                        <span class="detail-value">{restroom.address}</span>
-                    </div>
-                    <div class="detail">
-                        <span class="detail-label">Description: </span>
-                        <span class="detail-value">{restroom.description}</span>
-                    </div>
-                    <div class="detail">
-                        <span class="detail-label">Directions: </span>
-                        <span class="detail-value">{restroom.directions}</span>
-                    </div>
-                    </div>
-                    <div class="detail">
-                        <span class="detail-label">Amenities: </span>
-                        
+                    <div className="amenities">
+                        <h5>Amenities:</h5>
                         {restroom.amenities.length > 0 ? (
-                                restroom.amenities.map((item, index) => (
-                                    <div class="detail">
-                                        <span class="detail-label"></span>
-                                        <div class="amenities-container">
-                                            <div className="amenity-box" key={index}>{item.amenity.amenityName}</div>
-                                        </div>
-                                    </div>
-                                ))
-                            ) : (
-                                <li>No amenities available</li>
-                            )}
-                        
+                            <ListGroup variant="flush">
+                                {restroom.amenities.map((item, index) => (
+                                    <ListGroup.Item key={index} className="amenity-item">
+                                        {item.amenity.amenityName}
+                                    </ListGroup.Item>
+                                ))}
+                            </ListGroup>
+                        ) : (
+                            <p>No amenities available</p>
+                        )}
                     </div>
-                    
-                    
 
-                    
+
+
+
                 </Col>
                 <Col md={6} className="p-4">
 
@@ -126,9 +125,12 @@ function RestroomReviews() {
 
                 </Col>
             </Row>
-            
-            <Link className="btn btn-outline-success mb-4" to={`/reviews/${restroomId}/new`}>Add a Review</Link>
-            <ReviewPage type="restroom" reviews={restroom.reviews} />
+
+            {token && (
+                <Link className="btn btn-outline-success mb-4" to={`/reviews/${restroomId}/new`}>Add a Review</Link>
+            )}
+
+            <ReviewPage reviews={restroom.reviews}  type="restroom"/>
         </Container>
     );
 }
