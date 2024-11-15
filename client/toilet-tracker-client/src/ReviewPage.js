@@ -1,10 +1,10 @@
 import React from "react";
 import ReviewList from "./ReviewList";
 
-function ReviewPage({ type, reviews }) {
+function ReviewPage({ reviews, type }) {
     return (
         <div>
-            <ReviewList reviews={reviews} />
+            <ReviewList reviews={reviews} type={type}/>
         </div>
     );
 }
