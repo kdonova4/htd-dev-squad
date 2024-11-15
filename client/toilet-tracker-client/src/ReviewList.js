@@ -54,6 +54,14 @@ function ReviewList({ reviews }) {
 
 
 
+    const getRatingColor = (rating) => {
+        if (rating >= 4) return 'green';
+        if (rating >= 3) return 'yellow';
+        if (rating >= 2) return 'orange';
+        return 'red';
+    };
+
+
     return (
         <section className="container">
             <h2 className="mb-4">Reviews</h2>
@@ -62,30 +70,50 @@ function ReviewList({ reviews }) {
                 <p>No reviews available.</p>
             ) : (
                 reviewState.map(review => (
-                    <div key={review.reviewId} className="media-body pb-3 mb-0 small 1h-125 border-bottom border-gray" style={{ position: 'relative' }}>
-                        <h5>
-                            <span className="review-rating">
-                                {review.username || "Unknown User"} - {review.rating}
-                            </span>
-                        </h5>
-                        <p>Date Used: {review.used}</p>
-                        <p>
-                            <strong className="d-block text-gray-dark">{review.reviewText}</strong>
-                        </p>
-                        <footer>{new Date(review.timeStamp).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })}</footer>
+                    <div key={review.reviewId} className="container my-1 py-1">
+                        <div className="row d-flex justify-content-left">
+                            <div className="col-md-12 col-lg-10">
+                                <div className="card text-body">
+                                    <div className="card-body p-4">
+                                        <div className="rating-badge" style={{ backgroundColor: getRatingColor(review.rating) }}>
+                                            <span className="rating-number">{review.rating}</span>
+                                        </div>
+                                        
 
-                        {decodedToken && review.userId === decodedToken.appUserId && (
-
-                            <div style={{ position: 'absolute', top: '10px', right: '10px' }}>
-                                <Link className="btn btn-primary" to={`/reviews/${review.restroomId}/${review.reviewId}`} >Update</Link>
-                                <button className="btn btn-danger" onClick={() => handleDeleteReview(review.reviewId)}>Delete</button>
+                                        <div className="d-flex flex-start">
+                                            <img
+                                                className="rounded-circle shadow-1-strong me-3"
+                                                src="https://static.vecteezy.com/system/resources/previews/020/765/399/non_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg"
+                                                alt="avatar"
+                                                width="60"
+                                                height="60"
+                                            />
+                                            <div>
+                                                <h4 className="fw-bold mb-">{review.username || "unknown User"}</h4>
+                                                <div className="d-flex align-items-center mb-3">
+                                                    <p className="mb-0" style={{fontSize: '0.8rem'}}>Date Last Used: {review.used}</p>
+                                                    
+                                                </div>
+                                                <div style={{ position: 'absolute', top: '32px', right: '80px' }}><footer style={{fontSize: '0.8rem'}}>{new Date(review.timeStamp).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })}</footer></div>
+                                                <p className="mb-3" style={{fontSize: '1.8rem'}}>{review.reviewText}</p>
+                                                {decodedToken && review.userId === decodedToken.appUserId && (
+                                                    <div style={{ position: 'absolute', bottom: '10px', right: '10px' }}>
+                                                        <Link className="btn btn-outline-success"  to={`/reviews/${review.restroomId}/${review.reviewId}`} style={{ marginRight: '10px' }}>Update</Link>
+                                                        <button className="btn btn-outline-danger" onClick={() => handleDeleteReview(review.reviewId)}>Delete</button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        )}
+                        </div>
                     </div>
                 ))
             )}
         </section>
     );
 }
+
 
 export default ReviewList;

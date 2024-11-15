@@ -5,6 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import ReviewPage from "./ReviewPage";
+import './index.css';
 
 const RESTROOM_DEFAULT = {
     name: "",
@@ -36,7 +37,6 @@ function RestroomReviews() {
                 const response = await fetch(`http://localhost:8080/api/restroom/${restroomId}`);
                 if (response.ok) {
                     const data = await response.json();
-                    console.log(data);
                     setRestroom(data);
                 } else {
                     console.error("Error fetching restroom data");
@@ -59,24 +59,46 @@ function RestroomReviews() {
         <Container fluid>
             <Row>
                 <Col md={6} className="p-4">
-                    <h2>Restroom Details</h2>
-                    <div><strong>Name:</strong> {restroom.name}</div>
-                    <div><strong>Address:</strong> {restroom.address}</div>
-                    <div><strong>Description:</strong> {restroom.description}</div>
-                    <div><strong>Directions:</strong> {restroom.directions}</div>
-                    <div>
-                        <strong>Amenities:</strong>
-                        <ul>
-                            {restroom.amenities.length > 0 ? (
+                <div class="bathroom-details mt-5">
+                <h3 class="bathroom-name">Bathroom Details</h3>
+                    <div class="detail">
+                        <span class="detail-label">Name: </span>
+                        <span class="detail-value">{restroom.name}</span>
+                    </div>
+                    <div class="detail">
+                        <span class="detail-label">Address: </span>
+                        <span class="detail-value">{restroom.address}</span>
+                    </div>
+                    <div class="detail">
+                        <span class="detail-label">Description: </span>
+                        <span class="detail-value">{restroom.description}</span>
+                    </div>
+                    <div class="detail">
+                        <span class="detail-label">Directions: </span>
+                        <span class="detail-value">{restroom.directions}</span>
+                    </div>
+                    </div>
+                    <div class="detail">
+                        <span class="detail-label">Amenities: </span>
+                        
+                        {restroom.amenities.length > 0 ? (
                                 restroom.amenities.map((item, index) => (
-                                    <li key={index}>{item.amenity.amenityName}</li>
+                                    <div class="detail">
+                                        <span class="detail-label"></span>
+                                        <div class="amenities-container">
+                                            <div className="amenity-box" key={index}>{item.amenity.amenityName}</div>
+                                        </div>
+                                    </div>
                                 ))
                             ) : (
                                 <li>No amenities available</li>
                             )}
-                        </ul>
-
+                        
                     </div>
+                    
+                    
+
+                    
                 </Col>
                 <Col md={6} className="p-4">
 
@@ -104,6 +126,7 @@ function RestroomReviews() {
 
                 </Col>
             </Row>
+            
             <Link className="btn btn-outline-success mb-4" to={`/reviews/${restroomId}/new`}>Add a Review</Link>
             <ReviewPage type="restroom" reviews={restroom.reviews} />
         </Container>

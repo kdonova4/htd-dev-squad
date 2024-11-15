@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
+import './index.css';
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -9,6 +10,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
