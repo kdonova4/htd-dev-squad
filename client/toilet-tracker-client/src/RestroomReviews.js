@@ -104,6 +104,7 @@ function RestroomReviews() {
 
                 </Col>
             </Row>
+            
             <Link className="btn btn-outline-success mb-4" to={`/reviews/${restroomId}/new`}>Add a Review</Link>
             <ReviewPage type="restroom" reviews={restroom.reviews} />
         </Container>

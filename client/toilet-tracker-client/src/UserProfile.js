@@ -4,9 +4,10 @@ import { Container, Row, Col } from "react-bootstrap";
 import { useNavigate, useParams, Link} from "react-router-dom";
 import ReviewPage from "./ReviewPage";
 import { useRestrooms } from "./context/RestroomContext";
-
+import './index.css'
 function UserProfile() {
     const [restrooms, setRestrooms] = useState([]);
+    const [reviews, setReviews] = useState([]);
     const url = 'http://localhost:8080/api/restroom';
     const token = localStorage.getItem("token");
     let decodedToken;
@@ -46,7 +47,7 @@ function UserProfile() {
     const handleDeleteRestroom = (restroomId) => {
 
     }
-
+    console.log(reviews)
     return (<>
         <Container fluid>
     <Row>
