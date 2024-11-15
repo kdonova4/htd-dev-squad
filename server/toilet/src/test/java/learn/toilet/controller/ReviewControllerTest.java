@@ -147,7 +147,7 @@ public class ReviewControllerTest {
 
         String reviewJson = jsonMapper.writeValueAsString(review);
 
-        var request = put("/api/review/1")
+        var request = put("/api/review/1/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
                 .content(reviewJson);
@@ -163,7 +163,7 @@ public class ReviewControllerTest {
 
         String reviewJson = jsonMapper.writeValueAsString(review);
 
-        var request = put("/api/review/1")
+        var request = put("/api/review/1/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
                 .content(reviewJson);
@@ -180,7 +180,7 @@ public class ReviewControllerTest {
 
         String reviewJson = jsonMapper.writeValueAsString(review);
 
-        var request = put("/api/review/9")
+        var request = put("/api/review/1/9")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + token)
                 .content(reviewJson);
