@@ -18,6 +18,7 @@ public class Review {
     private int restroomId;
     private int userId;
     private String userName;
+    private String locationName;
 
     public Review() {
 
@@ -89,12 +90,19 @@ public class Review {
         this.used = used;
     }
 
-
     public String getUsername() {
         return userName;
     }
 
     public void setUsername(String userName) {
         this.userName = userName;
+    }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
     }
 }
