@@ -185,6 +185,7 @@ const RestroomForm = () => {
         if (response.status === 204) {
           return null;
 
+
           navigate(`/restrooms`);
 
         } else if (response.status === 400) {

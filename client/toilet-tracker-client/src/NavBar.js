@@ -23,9 +23,11 @@ function BasicExample() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">
-            <Nav.Link as={Link} to={"/restrooms/new"}>
-              Add New Restroom
-            </Nav.Link>
+            {token && (
+              <Nav.Link as={Link} to={"/restrooms/new"}>
+                Add New Restroom
+              </Nav.Link>
+            )}
             <Nav.Link as={Link} to={"/about"}>
               About
             </Nav.Link>
