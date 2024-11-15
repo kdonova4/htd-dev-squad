@@ -61,23 +61,23 @@ function RestroomReviews() {
         <Container fluid>
             <Row>
                 <Col md={6} className="p-4">
-                    <div class="bathroom-details mt-5">
-                        <h3 class="bathroom-name">Bathroom Details</h3>
-                        <div class="detail">
-                            <span class="detail-label">Name: </span>
-                            <span class="detail-value">{restroom.name}</span>
+                    <div className="bathroom-details mt-5">
+                        <h3 className="bathroom-name">Bathroom Details</h3>
+                        <div className="detail">
+                            <span className="detail-label">Name: </span>
+                            <span className="detail-value">{restroom.name}</span>
                         </div>
-                        <div class="detail">
-                            <span class="detail-label">Address: </span>
-                            <span class="detail-value">{restroom.address}</span>
+                        <div className="detail">
+                            <span className="detail-label">Address: </span>
+                            <span className="detail-value">{restroom.address}</span>
                         </div>
-                        <div class="detail">
-                            <span class="detail-label">Description: </span>
-                            <span class="detail-value">{restroom.description}</span>
+                        <div className="detail">
+                            <span className="detail-label">Description: </span>
+                            <span className="detail-value">{restroom.description}</span>
                         </div>
-                        <div class="detail">
-                            <span class="detail-label">Directions: </span>
-                            <span class="detail-value">{restroom.directions}</span>
+                        <div className="detail">
+                            <span className="detail-label">Directions: </span>
+                            <span className="detail-value">{restroom.directions}</span>
                         </div>
                     </div>
                     <div className="amenities">
