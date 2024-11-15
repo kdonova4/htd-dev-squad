@@ -36,7 +36,6 @@ function App() {
       const decodedToken = jwtDecode(token);
       role = decodedToken.authorities; // Assuming the authorities are stored under "authorities"
       isAuthenticated = true; // If token exists, the user is authenticated
-      console.log(role);
     } catch (e) {
       console.error("Invalid token", e);
     }
