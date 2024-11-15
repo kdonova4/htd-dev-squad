@@ -5,7 +5,7 @@ import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 
-function BasicExample() {
+function NavBar() {
   const { token, logout, role } = useAuth(); // Get role and token from context
 
   return (
@@ -62,4 +62,4 @@ function BasicExample() {
   );
 }
 
-export default BasicExample;
+export default NavBar;

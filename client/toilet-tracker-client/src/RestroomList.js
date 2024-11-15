@@ -1,16 +1,15 @@
 import React, { useEffect, useCallback } from "react";
-import { Row, Col, Button } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import LocationSearchForm from "./LocationSearchForm";
 import { useRestrooms } from "./context/RestroomContext";
 import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useLocation } from "./context/LocationContext";
 
 function RestroomList() {
     const { restrooms, updateRestrooms } = useRestrooms();
-    const navigate = useNavigate();
     const { location, updateLocation } = useLocation();
 
     const handleLocationChange = (latitude, longitude) => {
@@ -35,10 +34,6 @@ function RestroomList() {
                 });
         }
     }, [location, stableUpdateRestrooms]);
-
-    const handleDetailsClick = (restroomId) => {
-        navigate(`/restroom/${restroomId}`);
-    };
 
     return (
         <>
@@ -104,12 +99,12 @@ function RestroomList() {
                                     <h5 className="mb-1">{restroom.name}</h5>
                                     <p>{restroom.address || "--"}</p>
                                 </div>
-                                <Button
-                                    variant="primary"
-                                    onClick={() => handleDetailsClick(restroom.restroomId)}
+                                <Link
+                                    className="btn btn-outline-primary mr-2"
+                                    to={`/restroom/${restroom.restroomId}`}
                                 >
                                     More Details
-                                </Button>
+                                </Link>
                             </div>
                         ))}
                     </div>

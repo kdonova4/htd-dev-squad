@@ -39,6 +39,7 @@ const RestroomForm = () => {
   const { restroomId } = useParams();
   const url = "http://localhost:8080/api/restroom";
   const amenitiesUrl = "http://localhost:8080/api/amenity";
+  const restroomAmenitiesUrl = "http://localhost:8080/api/restroom/amenity"
 
   useEffect(() => {
     fetch(amenitiesUrl)
@@ -102,16 +103,16 @@ const RestroomForm = () => {
     setPosition([latitude, longitude]);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setSuccess(false);
     setErrors([]);
     updateLocation([restroom.latitude, restroom.longitude]); // Update map center
     if (restroomId) {
       // checks to see if there is an restroomId in the url
-      updateRestroom();
+      await updateRestroom();
     } else {
-      addRestroom();
+      await addRestroom();
     }
   };
 
@@ -138,7 +139,7 @@ const RestroomForm = () => {
       fetch(url, init)
         .then((response) => {
           if (response.status === 201) {
-            return null;
+            return response.json();
           } else if (response.status === 400) {
             return response.json();
           } else {
@@ -146,9 +147,9 @@ const RestroomForm = () => {
           }
         })
         .then((data) => {
-          if (!data) {
+          if (data.restroomId) {
             // happy path
-
+            updateAmenities(data)
             navigate("/restrooms");
           } else {
             //unhappy
@@ -164,7 +165,7 @@ const RestroomForm = () => {
     }
   };
 
-  const updateRestroom = () => {
+  const updateRestroom = async () => {
     restroom.restroomId = restroomId;
     const token = localStorage.getItem("token");
     const init = {
@@ -184,10 +185,6 @@ const RestroomForm = () => {
       .then((response) => {
         if (response.status === 204) {
           return null;
-
-
-          navigate(`/restrooms`);
-
         } else if (response.status === 400) {
           return response.json();
         } else {
@@ -197,6 +194,7 @@ const RestroomForm = () => {
       .then((data) => {
         if (!data) {
           // happy path
+          updateAmenities(restroom);
           navigate("/profile");
         } else {
           //unhappy
@@ -207,15 +205,75 @@ const RestroomForm = () => {
       .catch(console.log);
   };
 
+  // Function to update amenities
+  const updateAmenities = async (restroomArg) => {
+    console.log(restroomArg)
+    const token = localStorage.getItem("token");
+    const currentAmenities = restroom.amenities || [];
+    const currentAmenityIds = currentAmenities.map((amenity) => amenity.amenity.amenityId)
+    console.log(currentAmenities)
+    console.log(currentAmenityIds)
+    // Get the amenities that need to be removed
+    const amenitiesToRemove = amenities.filter(
+      (amenity) => !currentAmenityIds.includes(amenity.amenityId)
+    );
+    console.log(amenitiesToRemove)
+    try {
+      // Add amenities
+      for (const amenity of currentAmenities) {
+        await fetch(restroomAmenitiesUrl, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            restroomId: restroomArg.restroomId,
+            amenity: amenity.amenity,
+          }),
+        });
+      }
+      if (restroom.restroomId) {
+        // Remove amenities
+        for (const amenity of amenitiesToRemove) {
+          await fetch(`${restroomAmenitiesUrl}/${restroom.restroomId}/${amenity.amenityId}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        }
+      }
+      setSuccess(true); // Set success if all amenity updates succeed
+    } catch (error) {
+      console.error("Error updating amenities:", error);
+      setErrors(["Failed to update amenities. Please try again."]);
+    }
+  };
+
   const handleAmenityChange = (e) => {
     const { value, checked } = e.target;
+    const amenityId = Number(value); // Convert value to a number
+
+    // Find the selected amenity based on the amenityId
+    const selectedAmenity = amenities.find((amenity) => amenity.amenityId === amenityId);
+
     setRestroom((prev) => {
-      const amenities = checked
-        ? [...prev.amenities, value]
-        : prev.amenities.filter((amenity) => amenity !== value);
-      return { ...prev, amenities };
+      const updatedAmenities = checked
+        ? [
+            ...prev.amenities,
+            { restroomId: prev.restroomId, amenity: selectedAmenity }, // Add the selected amenity object to the array
+          ]
+        : prev.amenities.filter(
+            (amenity) => amenity.amenity.amenityId !== amenityId // Remove the selected amenity object if unchecked
+          );
+
+      return { ...prev, amenities: updatedAmenities };
     });
   };
+
+
+
 
   // Custom component to update map center
   const MapView = ({ position }) => {
@@ -232,7 +290,7 @@ const RestroomForm = () => {
     <Container fluid>
       <Row>
         <Col md={6} className="p-4">
-          <h2>Add Restroom</h2>
+          <h2>{restroomId ? "Edit Restroom" : "Add Restroom"}</h2>
           {success && (
             <Alert variant="success">Restroom added successfully!</Alert>
           )}
@@ -281,11 +339,11 @@ const RestroomForm = () => {
               <Form.Label>Amenities</Form.Label>
               {amenities.map((amenity) => (
                 <Form.Check
-                  key={amenity.id}
+                  key={amenity.amenityId} // Use amenityId here
                   type="checkbox"
-                  label={amenity.name}
-                  value={amenity.id}
-                  checked={restroom.amenities.includes(amenity.id)}
+                  label={amenity.amenityName} // Use amenityName here
+                  value={amenity.amenityId} // Use amenityId here
+                  checked={restroom.amenities.some((a) => a.amenity.amenityId === amenity.amenityId)} // Check if the amenityId exists in restroom.amenities
                   onChange={handleAmenityChange}
                 />
               ))}
