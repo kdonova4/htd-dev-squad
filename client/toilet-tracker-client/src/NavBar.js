@@ -21,7 +21,7 @@ function NavBar() {
           Toilet Tracker
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse id="basic-navbar-nav" style={{zIndex:'10000', background:'white'}}>
           <Nav className="ml-auto">
             {token && (
               <Nav.Link as={Link} to={"/restrooms/new"}>
@@ -56,6 +56,7 @@ function NavBar() {
               </>
             )}
           </Nav>
+
         </Navbar.Collapse>
       </Container>
     </Navbar>
